@@ -1,0 +1,206 @@
+/* ==========================================================
+   MOTION.CSS — Animation Tokens, Keyframes & Reduced Motion
+   beerstudios.org
+   ========================================================== */
+
+:root {
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 400ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-stepped: steps(5, end);
+}
+
+/* --- Keyframes --- */
+@keyframes starfield-drift {
+  from { transform: translateY(0); }
+  to { transform: translateY(-200px); }
+}
+
+@keyframes coin-spin {
+  0%   { transform: scaleX(1); opacity: 1; }
+  25%  { transform: scaleX(0.5); opacity: 0.85; }
+  50%  { transform: scaleX(0.15); opacity: 0.7; }
+  75%  { transform: scaleX(0.5); opacity: 0.85; }
+  100% { transform: scaleX(1); opacity: 1; }
+}
+
+@keyframes coin-hop {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-12px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes float-up {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-24px); }
+}
+
+@keyframes blink-cursor {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes boot-reveal {
+  from { opacity: 0; transform: scaleY(0); }
+  to   { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes toast-enter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toast-exit {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(16px); }
+}
+
+@keyframes section-reveal {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes xp-bar-step {
+  from { width: var(--xp-from, 0%); }
+  to   { width: var(--xp-to, 0%); }
+}
+
+@keyframes press-start-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* --- Starfield --- */
+.starfield {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.starfield-layer {
+  position: absolute;
+  inset: 0;
+  animation: starfield-drift 60s steps(120) infinite;
+}
+
+/* --- Coin Animation --- */
+.pixel-coin .pixel-coin-sprite {
+  display: block;
+  width: 16px;
+  height: 16px;
+  animation: coin-spin 600ms steps(4) infinite;
+}
+
+/* --- Section Reveal --- */
+.reveal-section {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.reveal-section.is-visible {
+  animation: section-reveal var(--dur-slow) var(--ease-out) forwards;
+}
+
+/* --- Press Start Blink --- */
+.press-start-blink {
+  animation: press-start-blink 1s steps(1) infinite;
+}
+
+/* --- Toast Animations --- */
+.toast-enter {
+  animation: toast-enter var(--dur-base) var(--ease-out) forwards;
+}
+
+.toast-exit {
+  animation: toast-exit var(--dur-base) ease-in forwards;
+}
+
+/* --- Arcade Mode CRT Overlay --- */
+[data-arcade="true"]::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.1) 2px,
+    rgba(0, 0, 0, 0.1) 4px
+  );
+}
+
+[data-arcade="true"] h1,
+[data-arcade="true"] h2,
+[data-arcade="true"] h3 {
+  text-shadow:
+    -1px 0 rgba(255, 93, 115, 0.25),
+     1px 0 rgba(76, 201, 240, 0.25);
+}
+
+/* ==========================================================
+   REDUCED MOTION
+   Applies when:
+   1. OS prefers-reduced-motion
+   2. User sets Motion to "Reduced" (data-motion="reduced")
+   ========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .starfield-layer {
+    animation: none !important;
+  }
+
+  .press-start-blink {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .pixel-coin .pixel-coin-sprite {
+    animation: none !important;
+  }
+
+  .reveal-section {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+[data-motion="reduced"] *,
+[data-motion="reduced"] *::before,
+[data-motion="reduced"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+[data-motion="reduced"] .starfield-layer {
+  animation: none !important;
+}
+
+[data-motion="reduced"] .press-start-blink {
+  animation: none !important;
+  opacity: 1 !important;
+}
+
+[data-motion="reduced"] .pixel-coin .pixel-coin-sprite {
+  animation: none !important;
+}
+
+[data-motion="reduced"] .reveal-section {
+  opacity: 1 !important;
+  transform: none !important;
+}

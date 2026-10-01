@@ -1,0 +1,30 @@
+export const SITE = {
+  name: 'Beerkanwar',
+  studio: 'Beer Studios',
+  url: 'https://beerstudios.org',
+  title: 'Beerkanwar — Gameplay & Systems Engineer',
+  description:
+    'Portfolio of Beerkanwar: Unity games, backend systems, and applied ML projects. Snake is live on Google Play.',
+  tagline: 'I build games — and the systems behind them.',
+  metaLine: 'B.Tech CSE · NIT Jalandhar · Unity · Backend · ML',
+  email: 'contact@beerstudios.org',
+  location: 'Punjab, India',
+  education: {
+    degree: 'B.Tech in Computer Science & Engineering',
+    institution: 'Dr. B.R. Ambedkar National Institute of Technology (NIT) Jalandhar',
+    timeline: '2023 – 2027 (Expected)',
+  },
+  focusAreas: ['Gameplay Systems', 'Backend & Security', 'Applied ML'],
+  currentWork: 'Building Siege Front (Unity 2D Auto-Battler) & Offline-First Hostel Mess Management System (.NET 10 MAUI)',
+  openTo: 'Software Engineering & Game Development Internships, Full-Time Roles, and Technical Collaborations',
+  languages: 'English, Hindi, Punjabi',
+  responseTime: 'Usually responds within 48 hours',
+  links: {
+    github: 'https://github.com/Beerkanwar',
+    linkedin: 'https://www.linkedin.com/in/beerkanwar',
+    itch: 'https://beer-23.itch.io',
+    bombMassacreItch: 'https://beer-23.itch.io/bomb-massacre',
+    googlePlaySnake: 'https://play.google.com/store/apps/details?id=com.BeerStudios.Snake',
+    resumePdf: '/resume.pdf',
+  },
+};

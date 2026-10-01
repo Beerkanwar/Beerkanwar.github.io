@@ -1,0 +1,470 @@
+/* ==========================================================
+   BASE.CSS — Reset, Typography, Global Elements, Utilities
+   beerstudios.org
+   ========================================================== */
+
+/* --- Font Faces --- */
+@font-face {
+  font-family: 'Silkscreen';
+  src: url('/fonts/Silkscreen-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Silkscreen';
+  src: url('/fonts/Silkscreen-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- Reset --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--text);
+  background-color: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background dot grid */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--muted) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: -2;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* --- Typography --- */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--text);
+  font-weight: 400;
+}
+
+h1 {
+  font-size: var(--fs-h1-title);
+  line-height: var(--lh-h1-title);
+}
+
+h2 {
+  font-size: var(--fs-h2);
+  line-height: var(--lh-h2);
+}
+
+h3 {
+  font-size: var(--fs-h3);
+  line-height: var(--lh-h3);
+}
+
+.body-lg {
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-body-lg);
+  max-width: 68ch;
+}
+
+.body-sm {
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-body-sm);
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: var(--lh-label);
+  color: var(--accent-yellow);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.text-muted {
+  color: var(--muted);
+}
+
+/* --- Layout --- */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-px);
+}
+
+.container--bonus {
+  max-width: var(--container-bonus);
+}
+
+.container--recruiter {
+  max-width: var(--container-recruiter);
+}
+
+.section {
+  padding-block: var(--section-py);
+}
+
+/* --- Accessibility --- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 8px;
+  z-index: 200;
+  padding: 8px 16px;
+  background: var(--accent-yellow);
+  color: var(--accent-yellow-ink);
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  text-transform: uppercase;
+  border: 2px solid var(--border);
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 8px;
+}
+
+/* --- Focus Visibility --- */
+:focus-visible {
+  outline: 3px solid var(--accent-cyan);
+  outline-offset: 2px;
+}
+
+/* --- Buttons --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  border: 2px solid var(--border);
+  box-shadow: 4px 4px 0 var(--shadow-pixel);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform var(--dur-fast, 120ms) ease,
+              box-shadow var(--dur-fast, 120ms) ease,
+              border-color var(--dur-fast, 120ms) ease;
+}
+
+.btn:hover,
+.btn:focus-visible {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--shadow-pixel);
+  border-color: var(--border-strong);
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--shadow-pixel);
+}
+
+.btn-primary {
+  background: var(--accent-yellow);
+  color: var(--accent-yellow-ink);
+  border-color: var(--accent-yellow-ink);
+}
+
+.btn-secondary {
+  background: var(--panel);
+  color: var(--text);
+}
+
+.btn-tertiary {
+  background: transparent;
+  color: var(--muted);
+  border-color: var(--border);
+  box-shadow: none;
+}
+
+.btn-tertiary:hover,
+.btn-tertiary:focus-visible {
+  color: var(--text);
+  box-shadow: none;
+  transform: none;
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: var(--fs-chip);
+}
+
+/* --- Badges --- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  border: 2px solid;
+  white-space: nowrap;
+}
+
+.badge-shipped {
+  background: var(--accent-yellow);
+  color: var(--accent-yellow-ink);
+  border-color: var(--accent-yellow-ink);
+}
+
+.badge-playable {
+  background: var(--accent-cyan);
+  color: var(--accent-yellow-ink);
+  border-color: var(--accent-yellow-ink);
+}
+
+.badge-jam {
+  background: transparent;
+  color: var(--accent-coral);
+  border-color: var(--accent-coral);
+}
+
+.badge-prototype {
+  background: transparent;
+  color: var(--muted);
+  border-color: var(--border);
+}
+
+.badge-tutorial,
+.badge-template {
+  background: transparent;
+  color: var(--muted);
+  border-color: var(--border);
+  font-size: 10px;
+}
+
+.badge-in-progress {
+  background: var(--accent-cyan);
+  color: var(--accent-yellow-ink);
+  border-color: var(--accent-yellow-ink);
+}
+
+/* Track Badges */
+.badge-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  border: 2px solid;
+  white-space: nowrap;
+}
+
+.badge-track--gameplay {
+  color: var(--track-gameplay);
+  border-color: var(--track-gameplay);
+}
+
+.badge-track--systems {
+  color: var(--track-systems);
+  border-color: var(--track-systems);
+}
+
+.badge-track--both {
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+}
+
+/* --- Chips / Tags --- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-chip);
+  line-height: var(--lh-chip);
+  color: var(--muted);
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+}
+
+.chip-more {
+  color: var(--accent-cyan);
+  background: transparent;
+  border-style: dashed;
+}
+
+/* --- Filter Chips --- */
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  font-family: var(--font-display);
+  font-size: var(--fs-chip);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--muted);
+  background: var(--panel);
+  border: 2px solid var(--border);
+  cursor: pointer;
+  transition: background var(--dur-fast, 120ms) ease,
+              color var(--dur-fast, 120ms) ease,
+              border-color var(--dur-fast, 120ms) ease;
+}
+
+.filter-chip[aria-pressed="true"] {
+  background: var(--accent-yellow);
+  color: var(--accent-yellow-ink);
+  border-color: var(--accent-yellow-ink);
+}
+
+.filter-chip:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+/* --- Code Blocks (in case file prose) --- */
+pre {
+  background: var(--bg-deep);
+  border: 2px solid var(--border);
+  padding: 16px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* Inline code */
+:not(pre) > code {
+  background: var(--bg-deep);
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+}
+
+/* --- Definition Lists --- */
+dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 16px;
+}
+
+dt {
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+dd {
+  font-size: var(--fs-body-sm);
+}
+
+/* --- Horizontal Rule --- */
+hr {
+  border: none;
+  border-top: 2px solid var(--border);
+  margin-block: var(--sp-8);
+}

@@ -1,0 +1,70 @@
+/* ==========================================================
+   PRINT.CSS — Print Styles (Recruiter Mode A4 Target)
+   beerstudios.org
+   ========================================================== */
+
+@media print {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt;
+    line-height: 1.4;
+  }
+
+  body::before {
+    display: none !important;
+  }
+
+  .hud,
+  .bottom-bar,
+  .starfield,
+  .toast-container,
+  .pixel-coin,
+  .boot-overlay,
+  .xp-bar,
+  .recruiter-topbar,
+  .skip-link {
+    display: none !important;
+  }
+
+  a {
+    color: black !important;
+    text-decoration: underline;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555;
+  }
+
+  .container--recruiter {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+
+  .recruiter-section {
+    page-break-inside: avoid;
+  }
+
+  .recruiter-project {
+    page-break-inside: avoid;
+  }
+
+  @page {
+    size: A4;
+    margin: 15mm 18mm;
+  }
+}
