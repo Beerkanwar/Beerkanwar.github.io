@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import QuestCard from '../QuestCard.astro';
+import Coin from '../Coin.astro';
+
+const allQuests = await getCollection('quests');
+const sortedQuests = allQuests.sort((a, b) => a.data.order - b.data.order);
+---
+
+<section class="section section-quests" id="quests">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Quests & Experience</h2>
+      <p class="section-desc">Professional timeline, internships, and educational milestones.</p>
+    </div>
+
+    <div class="timeline">
+      {sortedQuests.map(quest => (
+        <div class="timeline-item">
+          <div class="timeline-node" aria-hidden="true"></div>
+          <div class="timeline-content">
+            <QuestCard quest={quest} />
+          </div>
+        </div>
+      ))}
+    </div>
+    
+    <div class="coin-container-quests hide-on-print">
+      <Coin id={5} locationHint="End of Quests Timeline" />
+    </div>
+  </div>
+</section>

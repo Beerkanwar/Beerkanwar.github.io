@@ -1,0 +1,47 @@
+---
+import { SITE } from '../../data/site';
+import Icon from '../Icon.astro';
+---
+
+<section class="section section-contact" id="contact">
+  <div class="container container--sm">
+    <div class="contact-card">
+      <div class="contact-header">
+        <Icon name="mail" size={32} />
+        <h2>Communication Link</h2>
+      </div>
+      <p class="contact-desc">
+        Looking for a systems-oriented engineer or a dedicated gameplay programmer? 
+        My inbox is open for internships and full-time opportunities.
+      </p>
+      
+      <div class="contact-email-wrapper">
+        <input 
+          type="text" 
+          id="contact-email-input" 
+          class="contact-input" 
+          value={SITE.email} 
+          readonly 
+          aria-label="Email address"
+        />
+        <button 
+          type="button" 
+          id="btn-copy-email" 
+          class="btn btn-primary"
+          title="Copy to clipboard"
+        >
+          <Icon name="copy" size={16} /> Copy
+        </button>
+      </div>
+
+      <div class="contact-socials hide-on-print">
+        <a href={SITE.links.github} target="_blank" rel="noopener noreferrer" class="social-link">
+          <Icon name="github" size={16} /> GitHub
+        </a>
+        <a href={SITE.links.linkedin} target="_blank" rel="noopener noreferrer" class="social-link">
+          <Icon name="linkedin" size={16} /> LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

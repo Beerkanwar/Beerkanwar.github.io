@@ -1,0 +1,66 @@
+---
+import { getCollection } from 'astro:content';
+import Card from '../Card.astro';
+import Icon from '../Icon.astro';
+
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects.filter(p => p.data.tier === 'featured').sort((a, b) => a.data.orderDefault - b.data.orderDefault);
+const sideProjects = allProjects.filter(p => p.data.tier === 'side').sort((a, b) => a.data.orderDefault - b.data.orderDefault);
+---
+
+<section class="section section-levels" id="levels">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">World 1: Featured Architecture</h2>
+      <p class="section-desc">Major engineering projects demonstrating architecture, patterns, and full-stack systems.</p>
+    </div>
+
+    <!-- Filter Bar (JS driven) -->
+    <div class="filter-bar hide-on-print" aria-label="Project filtering">
+      <div class="filter-tabs" role="tablist">
+        <button type="button" role="tab" aria-selected="true" data-filter="all" class="filter-tab is-active">
+          <Icon name="folder" size={16} /> All Tracks
+        </button>
+        <button type="button" role="tab" aria-selected="false" data-filter="gameplay" class="filter-tab">
+          <Icon name="controller" size={16} /> Gameplay Only
+        </button>
+        <button type="button" role="tab" aria-selected="false" data-filter="systems" class="filter-tab">
+          <Icon name="gear" size={16} /> Systems Only
+        </button>
+      </div>
+      <div class="sort-controls">
+        <label for="sort-select" class="sr-only">Sort by:</label>
+        <select id="sort-select" class="sort-select">
+          <option value="default">Sort: Chronological</option>
+          <option value="stage">Sort: Stage Number</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Featured Grid -->
+    <div class="project-grid" id="grid-featured">
+      {featuredProjects.map(project => (
+        <Card project={project} />
+      ))}
+    </div>
+
+    <div class="section-header" style="margin-top: 4rem;">
+      <h2 class="section-title">World 2: Side Quests</h2>
+      <p class="section-desc">Game jams, prototypes, algorithm implementations, and smaller focused scopes.</p>
+    </div>
+
+    <!-- Side Grid -->
+    <div class="project-grid" id="grid-side">
+      {sideProjects.map(project => (
+        <Card project={project} />
+      ))}
+    </div>
+    
+    <!-- Empty State -->
+    <div class="empty-state" id="grid-empty" hidden>
+      <Icon name="folder" size={32} />
+      <p>No projects match your current class filter.</p>
+      <button type="button" class="btn btn-primary" onclick="document.querySelector('[data-filter=all]').click()">Reset Filter</button>
+    </div>
+  </div>
+</section>

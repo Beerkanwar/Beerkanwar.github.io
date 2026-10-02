@@ -1,0 +1,53 @@
+---
+import { SKILLS, SKILL_BRANCHES } from '../../data/skills';
+import Icon from '../Icon.astro';
+import Coin from '../Coin.astro';
+---
+
+<section class="section section-skills" id="skills">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Skill Tree</h2>
+      <p class="section-desc">Interactive capability map. Click nodes to highlight where they were used.</p>
+    </div>
+
+    <!-- The actual tree container and drawing logic will be initialized by JS -->
+    <div class="skill-tree-container hide-on-print" aria-label="Interactive skill tree">
+      <canvas id="skill-tree-canvas" class="skill-tree-canvas"></canvas>
+      
+      <div class="skill-nodes" id="skill-nodes-container">
+        {SKILLS.map(skill => {
+          const branchDef = SKILL_BRANCHES.find(b => b.id === skill.branch);
+          return (
+            <button 
+              type="button" 
+              class="skill-node" 
+              data-skill-id={skill.id}
+              data-category={skill.branch}
+              data-level={skill.pips}
+              data-projects={skill.projects.join(',')}
+              aria-label={`Skill: ${skill.name}`}
+            >
+              <Icon name={branchDef?.icon || 'star'} size={24} />
+              <span class="skill-node-label">{skill.name}</span>
+            </button>
+          );
+        })}
+      </div>
+      
+      <div class="coin-container-skills">
+        <Coin id={4} locationHint="Skill Tree Section" />
+      </div>
+    </div>
+    
+    <!-- Static fallback for print/recruiter mode -->
+    <div class="skill-print-list">
+      {SKILLS.map(skill => (
+        <div class="skill-print-item">
+          <strong>{skill.name}</strong> 
+          {skill.projects.length > 0 && <span class="text-muted"> (Used in: {skill.projects.join(', ')})</span>}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

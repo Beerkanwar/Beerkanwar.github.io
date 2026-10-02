@@ -1,0 +1,54 @@
+---
+import { SITE } from '../../data/site';
+import Icon from '../Icon.astro';
+import Coin from '../Coin.astro';
+---
+
+<section class="section section-hero" id="top">
+  <div class="container container--hero">
+    <div class="hero-content">
+      <div class="hero-boot-sequence" aria-hidden="true">
+        <span class="typewriter-line">> BOOT_OS v9.4.2</span>
+        <span class="typewriter-line">> INITIALIZING SYSTEM... OK</span>
+        <span class="typewriter-line">> LOADING PROFILES...</span>
+      </div>
+      
+      <h1 class="hero-title glitch" data-text={SITE.name}>{SITE.name}</h1>
+      <h2 class="hero-subtitle">{SITE.tagline}</h2>
+      
+      <p class="hero-bio">
+        I engineer high-performance systems and gameplay mechanics from scratch. 
+        Whether it's building O(1) data structures in Unity or resilient microservices in Node.js, 
+        I believe in strict constraints, testable architecture, and zero bloat.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#levels" class="btn btn-primary btn-lg" id="btn-press-start">
+          <Icon name="play" size={24} /> Press Start
+        </a>
+        <a href="#about" class="btn btn-secondary btn-lg">
+          <Icon name="folder" size={24} /> Load Save
+        </a>
+      </div>
+
+      <div class="hero-socials">
+        <a href={SITE.links.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile">
+          <Icon name="github" size={24} />
+        </a>
+        <a href={SITE.links.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile">
+          <Icon name="linkedin" size={24} />
+        </a>
+        <a href={SITE.links.itch} target="_blank" rel="noopener noreferrer" aria-label="itch.io Profile">
+          <Icon name="itch" size={24} />
+        </a>
+        <a href={SITE.links.resumePdf} class="resume-link" download>
+          <Icon name="copy" size={24} /> Résumé
+        </a>
+      </div>
+      
+      <div class="coin-container-hero">
+        <Coin id={1} locationHint="Hero Section" />
+      </div>
+    </div>
+  </div>
+</section>
