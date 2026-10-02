@@ -4,7 +4,6 @@ const projectsCollection = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
-    slug: z.string(),
     track: z.enum(['gameplay', 'systems', 'both']),
     tier: z.enum(['featured', 'side']),
     canonicalStage: z.string(),
@@ -105,7 +104,6 @@ const wipCollection = defineCollection({
   schema: z.object({
     order: z.number(),
     title: z.string(),
-    slug: z.string(),
     track: z.enum(['gameplay', 'systems', 'both']),
     phase: z.enum(['Plan', 'Prototype', 'Alpha', 'Release']),
     phaseNote: z.string(),
