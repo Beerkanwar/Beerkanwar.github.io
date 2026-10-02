@@ -10,7 +10,7 @@ import Coin from '../../components/Coin.astro';
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
   return projects.map(project => ({
-    params: { id: project.id },
+    params: { id: project.id.replace(/\.md$/, '') },
     props: { project },
   }));
 }
@@ -159,7 +159,7 @@ const { Content } = await render(project);
       </article>
       
       <div class="case-file-footer">
-        {project.id === 'resource-hub' && <Coin id={7} locationHint="End of Resource Hub Case File" />}
+        {project.id.replace(/\.md$/, '') === 'resource-hub' && <Coin id={7} locationHint="End of Resource Hub Case File" />}
       </div>
     </div>
   </div>

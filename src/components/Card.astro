@@ -11,19 +11,20 @@ interface Props {
 
 const { project } = Astro.props;
 const data = project.data;
+const slug = project.id.replace(/\.md$/, '');
 ---
 
 <article 
   class="card" 
   data-track={data.track} 
   data-tier={data.tier} 
-  id={`project-${project.id}`}
+  id={`project-${slug}`}
 >
   <div class="card-header">
     <div class="card-stage">{data.canonicalStage}</div>
     <div class="card-header-main">
       <h3 class="card-title">
-        <a href={`/projects/${project.id}`}>{data.title}</a>
+        <a href={`/projects/${slug}`}>{data.title}</a>
       </h3>
       <div class="card-badges">
         {data.statuses.map(status => (
@@ -34,7 +35,7 @@ const data = project.data;
   </div>
 
   <div class="card-media">
-    <a href={`/projects/${project.id}`} tabindex="-1">
+    <a href={`/projects/${slug}`} tabindex="-1">
       {data.media.clipWebm && data.media.clipMp4 ? (
         <video 
           class="card-video" 
@@ -68,7 +69,7 @@ const data = project.data;
     </div>
 
     <div class="card-actions">
-      <a href={`/projects/${project.id}`} class="btn btn-primary">
+      <a href={`/projects/${slug}`} class="btn btn-primary">
         Read Case File
       </a>
       
@@ -97,8 +98,8 @@ const data = project.data;
       )}
 
       <!-- Hidden Coins in specific cards based on spec logic -->
-      {project.id === 'minesweeper' && <div class="coin-container-inline"><Coin id={2} locationHint="Minesweeper Card" /></div>}
-      {project.id === 'bomb-massacre' && <div class="coin-container-inline"><Coin id={3} locationHint="Bomb Massacre Card" /></div>}
+      {slug === 'minesweeper' && <div class="coin-container-inline"><Coin id={2} locationHint="Minesweeper Card" /></div>}
+      {slug === 'bomb-massacre' && <div class="coin-container-inline"><Coin id={3} locationHint="Bomb Massacre Card" /></div>}
     </div>
   </div>
 </article>
