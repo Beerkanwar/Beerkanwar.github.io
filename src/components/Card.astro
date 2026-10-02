@@ -4,6 +4,9 @@ import Badge from './Badge.astro';
 import Chip from './Chip.astro';
 import Icon from './Icon.astro';
 import Coin from './Coin.astro';
+import BlueprintPoster from './BlueprintPoster.astro';
+import fs from 'node:fs';
+import path from 'node:path';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -12,6 +15,9 @@ interface Props {
 const { project } = Astro.props;
 const data = project.data;
 const slug = project.id.replace(/\.md$/, '');
+
+const posterPath = path.join(process.cwd(), 'public', data.media.poster);
+const hasPoster = fs.existsSync(posterPath);
 ---
 
 <article 
@@ -36,25 +42,29 @@ const slug = project.id.replace(/\.md$/, '');
 
   <div class="card-media">
     <a href={`/projects/${slug}`} tabindex="-1">
-      {data.media.clipWebm && data.media.clipMp4 ? (
-        <video 
-          class="card-video" 
-          autoplay 
-          loop 
-          muted 
-          playsinline 
-          poster={data.media.poster}
-        >
-          <source src={data.media.clipWebm} type="video/webm" />
-          <source src={data.media.clipMp4} type="video/mp4" />
-        </video>
+      {hasPoster ? (
+        data.media.clipWebm && data.media.clipMp4 ? (
+          <video 
+            class="card-video" 
+            autoplay 
+            loop 
+            muted 
+            playsinline 
+            poster={data.media.poster}
+          >
+            <source src={data.media.clipWebm} type="video/webm" />
+            <source src={data.media.clipMp4} type="video/mp4" />
+          </video>
+        ) : (
+          <img 
+            src={data.media.poster} 
+            alt={`Screenshot of ${data.title}`} 
+            loading="lazy" 
+            class="card-img" 
+          />
+        )
       ) : (
-        <img 
-          src={data.media.poster} 
-          alt={`Screenshot of ${data.title}`} 
-          loading="lazy" 
-          class="card-img" 
-        />
+        <BlueprintPoster title={data.title} stage={data.canonicalStage} track={data.track} stack={data.stack} />
       )}
     </a>
   </div>

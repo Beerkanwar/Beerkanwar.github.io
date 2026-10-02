@@ -6,6 +6,9 @@ import Chip from '../../components/Chip.astro';
 import Gallery from '../../components/Gallery.astro';
 import Icon from '../../components/Icon.astro';
 import Coin from '../../components/Coin.astro';
+import BlueprintPoster from '../../components/BlueprintPoster.astro';
+import fs from 'node:fs';
+import path from 'node:path';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -18,6 +21,9 @@ export async function getStaticPaths() {
 const { project } = Astro.props;
 const data = project.data;
 const { Content } = await render(project);
+
+const posterPath = path.join(process.cwd(), 'public', data.media.poster);
+const hasPoster = fs.existsSync(posterPath);
 ---
 
 <BaseLayout title={`${data.title} | Case File`}>
@@ -70,13 +76,17 @@ const { Content } = await render(project);
 
         <!-- Media Hero -->
         <div class="case-media-hero">
-          {data.media.clipWebm && data.media.clipMp4 ? (
-            <video class="case-video-full" autoplay loop muted playsinline poster={data.media.poster}>
-              <source src={data.media.clipWebm} type="video/webm" />
-              <source src={data.media.clipMp4} type="video/mp4" />
-            </video>
+          {hasPoster ? (
+            data.media.clipWebm && data.media.clipMp4 ? (
+              <video class="case-video-full" autoplay loop muted playsinline poster={data.media.poster}>
+                <source src={data.media.clipWebm} type="video/webm" />
+                <source src={data.media.clipMp4} type="video/mp4" />
+              </video>
+            ) : (
+              <img src={data.media.poster} alt={`Hero screenshot of ${data.title}`} class="case-img-full" />
+            )
           ) : (
-            <img src={data.media.poster} alt={`Hero screenshot of ${data.title}`} class="case-img-full" />
+            <BlueprintPoster title={data.title} stage={data.canonicalStage} track={data.track} stack={data.stack} />
           )}
         </div>
 

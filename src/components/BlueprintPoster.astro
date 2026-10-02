@@ -1,0 +1,94 @@
+---
+interface Props {
+  title: string;
+  stage: string;
+  track: string;
+  stack: string[];
+}
+
+const { title, stage, track, stack } = Astro.props;
+
+// Compute a deterministic hue from the title string
+let hash = 0;
+for (let i = 0; i < title.length; i++) {
+  hash = title.charCodeAt(i) + ((hash << 5) - hash);
+}
+const hue = Math.abs(hash) % 360;
+
+const primaryColor = `hsl(${hue}, 70%, 50%)`;
+const bgPattern = track === 'gameplay' ? 'url(#grid)' : track === 'systems' ? 'url(#dots)' : 'url(#stripes)';
+---
+
+<svg viewBox="0 0 1280 720" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" class="blueprint-poster">
+  <defs>
+    <!-- Background Patterns -->
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="#0D0F1E" />
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#252A4A" stroke-width="1" />
+    </pattern>
+    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
+      <rect width="20" height="20" fill="#0D0F1E" />
+      <circle cx="2" cy="2" r="1" fill="#31375C" />
+    </pattern>
+    <pattern id="stripes" width="20" height="20" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <rect width="20" height="20" fill="#0D0F1E" />
+      <line x1="0" y1="0" x2="0" y2="20" stroke="#1A1E38" stroke-width="4" />
+    </pattern>
+    
+    <!-- Glitch Filter -->
+    <filter id="glitch">
+      <feOffset dx="4" dy="0" in="SourceGraphic" result="red-shift">
+        <feColorMatrix type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" />
+      </feOffset>
+      <feOffset dx="-4" dy="0" in="SourceGraphic" result="cyan-shift">
+        <feColorMatrix type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
+      </feOffset>
+      <feBlend mode="screen" in="red-shift" in2="cyan-shift" />
+      <feBlend mode="screen" in="SourceGraphic" />
+    </filter>
+  </defs>
+
+  <!-- Base -->
+  <rect width="100%" height="100%" fill={bgPattern} />
+  
+  <!-- UI Accents -->
+  <rect x="40" y="40" width="8" height="640" fill={primaryColor} />
+  <rect x="40" y="40" width="1200" height="8" fill={primaryColor} opacity="0.3" />
+  <rect x="1232" y="40" width="8" height="640" fill={primaryColor} opacity="0.3" />
+  <rect x="40" y="672" width="1200" height="8" fill={primaryColor} opacity="0.3" />
+  
+  <!-- Text Elements -->
+  <text x="80" y="120" font-family="'JetBrains Mono', monospace" font-size="24" fill="#9AA3C7" letter-spacing="4">
+    STAGE {stage} // {track.toUpperCase()}
+  </text>
+  
+  <text x="76" y="220" font-family="'Silkscreen', monospace" font-size="80" fill="#FFFFFF" font-weight="bold" filter="url(#glitch)">
+    {title.toUpperCase()}
+  </text>
+  
+  <!-- Tech Stack Grid -->
+  <g transform="translate(80, 280)">
+    {stack.slice(0, 6).map((tech, i) => (
+      <g transform={`translate(${(i % 3) * 300}, ${Math.floor(i / 3) * 60})`}>
+        <rect width="280" height="40" fill="#1A1E38" rx="4" />
+        <rect width="4" height="40" fill={primaryColor} rx="2" />
+        <text x="20" y="26" font-family="'JetBrains Mono', monospace" font-size="16" fill="#9AA3C7">
+          {tech}
+        </text>
+      </g>
+    ))}
+  </g>
+  
+  <!-- Decorative Abstract Diagram -->
+  <g transform="translate(880, 280)" stroke={primaryColor} stroke-width="2" fill="none">
+    <circle cx="100" cy="100" r="80" stroke-dasharray="10 10" />
+    <circle cx="100" cy="100" r="60" opacity="0.5" />
+    <circle cx="100" cy="100" r="20" fill={primaryColor} />
+    <path d="M100 20 L100 180 M20 100 L180 100" opacity="0.3" />
+    <path d="M43.4 43.4 L156.6 156.6 M43.4 156.6 L156.6 43.4" opacity="0.3" />
+  </g>
+  
+  <text x="80" y="640" font-family="'JetBrains Mono', monospace" font-size="16" fill="#4B5377">
+    SYSTEM_INIT: OK | MEMORY: ALLOCATED | RENDERING: ONLINE
+  </text>
+</svg>
