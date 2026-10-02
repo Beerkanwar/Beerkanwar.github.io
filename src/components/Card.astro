@@ -1,0 +1,104 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Badge from './Badge.astro';
+import Chip from './Chip.astro';
+import Icon from './Icon.astro';
+import Coin from './Coin.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const data = project.data;
+---
+
+<article 
+  class="card" 
+  data-track={data.track} 
+  data-tier={data.tier} 
+  id={`project-${project.id}`}
+>
+  <div class="card-header">
+    <div class="card-stage">{data.canonicalStage}</div>
+    <div class="card-header-main">
+      <h3 class="card-title">
+        <a href={`/projects/${project.id}`}>{data.title}</a>
+      </h3>
+      <div class="card-badges">
+        {data.statuses.map(status => (
+          <Badge status={status} />
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div class="card-media">
+    <a href={`/projects/${project.id}`} tabindex="-1">
+      {data.media.clipWebm && data.media.clipMp4 ? (
+        <video 
+          class="card-video" 
+          autoplay 
+          loop 
+          muted 
+          playsinline 
+          poster={data.media.poster}
+        >
+          <source src={data.media.clipWebm} type="video/webm" />
+          <source src={data.media.clipMp4} type="video/mp4" />
+        </video>
+      ) : (
+        <img 
+          src={data.media.poster} 
+          alt={`Screenshot of ${data.title}`} 
+          loading="lazy" 
+          class="card-img" 
+        />
+      )}
+    </a>
+  </div>
+
+  <div class="card-body">
+    <p class="card-hook">{data.hook}</p>
+    
+    <div class="card-chips">
+      {data.stack.map(tech => (
+        <Chip text={tech} />
+      ))}
+    </div>
+
+    <div class="card-actions">
+      <a href={`/projects/${project.id}`} class="btn btn-primary">
+        Read Case File
+      </a>
+      
+      {data.links.playStore && (
+        <a href={data.links.playStore} target="_blank" rel="noopener noreferrer" class="btn btn-secondary" aria-label="Get it on Google Play">
+          <Icon name="google-play" size={16} /> Play Store
+        </a>
+      )}
+      
+      {data.links.itch && (
+        <a href={data.links.itch} target="_blank" rel="noopener noreferrer" class="btn btn-secondary" aria-label="Play on itch.io">
+          <Icon name="itch" size={16} /> Play (Web)
+        </a>
+      )}
+
+      {data.links.repo && (
+        <a href={data.links.repo} target="_blank" rel="noopener noreferrer" class="btn btn-secondary" aria-label="Source code on GitHub">
+          <Icon name="github" size={16} /> Source
+        </a>
+      )}
+      
+      {data.links.video && (
+        <a href={data.links.video} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+          <Icon name="play" size={16} /> Video
+        </a>
+      )}
+
+      <!-- Hidden Coins in specific cards based on spec logic -->
+      {project.id === 'minesweeper' && <div class="coin-container-inline"><Coin id={2} locationHint="Minesweeper Card" /></div>}
+      {project.id === 'bomb-massacre' && <div class="coin-container-inline"><Coin id={3} locationHint="Bomb Massacre Card" /></div>}
+    </div>
+  </div>
+</article>

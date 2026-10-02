@@ -1,0 +1,43 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Icon from './Icon.astro';
+
+
+interface Props {
+  quest: CollectionEntry<'quests'>;
+}
+
+const { quest } = Astro.props;
+const data = quest.data;
+---
+
+<article class="quest-card">
+  <div class="quest-stamp" aria-hidden="true">{data.stamp}</div>
+  
+  <div class="quest-header">
+    <h3 class="quest-title">{data.title}</h3>
+    <div class="quest-meta">
+      <span class="quest-org">{data.organization}</span>
+      <span class="quest-loc"><Icon name="folder" size={16} /> {data.location}</span>
+      <span class="quest-date">{data.dateRange}</span>
+    </div>
+  </div>
+
+  <div class="quest-body">
+    <ul class="quest-bullets">
+      {data.bullets.map(bullet => (
+        <li set:html={bullet} />
+      ))}
+    </ul>
+    
+    {data.links && data.links.length > 0 && (
+      <div class="quest-links">
+        {data.links.map(link => (
+          <a href={link.url} target="_blank" rel="noopener noreferrer" class="quest-link">
+            {link.label}
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</article>

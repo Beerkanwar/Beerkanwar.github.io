@@ -1,0 +1,71 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Chip from './Chip.astro';
+
+interface Props {
+  wip: CollectionEntry<'wip'>;
+}
+
+const { wip } = Astro.props;
+const data = wip.data;
+---
+
+<article class="wip-card" id={`wip-${wip.id}`}>
+  <div class="wip-header">
+    <div class="wip-phase-indicator">
+      <span class="wip-pulse" aria-hidden="true"></span>
+      <span class="wip-phase-text">{data.phaseNote}</span>
+    </div>
+    <h3 class="wip-title">{data.title}</h3>
+    <p class="wip-hook">{data.hook}</p>
+    
+    <div class="card-chips">
+      {data.stack.map(tech => (
+        <Chip text={tech} />
+      ))}
+    </div>
+  </div>
+
+  <div class="wip-grid">
+    <div class="wip-column">
+      <h4>What it is</h4>
+      <p>{data.whatItIs}</p>
+      
+      <h4>Architecture Highlights</h4>
+      <ul>
+        {data.architectureHighlights.map(item => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </div>
+    
+    <div class="wip-column">
+      <h4>Done So Far</h4>
+      <ul>
+        {data.doneSoFar.map(item => (
+          <li>{item}</li>
+        ))}
+      </ul>
+      
+      <h4>Current Focus</h4>
+      <p>{data.currentFocus}</p>
+      
+      <h4>Next Milestone</h4>
+      <p>{data.nextMilestone}</p>
+    </div>
+  </div>
+
+  {data.devLog && data.devLog.length > 0 && (
+    <div class="wip-log">
+      <h4>Recent Dev Log</h4>
+      <ul class="wip-log-list">
+        {data.devLog.map(log => (
+          <li>
+            <span class="wip-log-date">{log.date}</span>
+            <span class="wip-log-entry">{log.entry}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+</article>
