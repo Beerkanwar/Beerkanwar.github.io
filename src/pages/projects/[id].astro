@@ -1,0 +1,166 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Badge from '../../components/Badge.astro';
+import Chip from '../../components/Chip.astro';
+import Gallery from '../../components/Gallery.astro';
+import Icon from '../../components/Icon.astro';
+import Coin from '../../components/Coin.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map(project => ({
+    params: { id: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const data = project.data;
+const { Content } = await render(project);
+---
+
+<BaseLayout title={`${data.title} | Case File`}>
+  <div class="case-file-wrapper" id="top">
+    <div class="container">
+      <div class="case-file-nav">
+        <a href="/#levels" class="btn btn-secondary">&larr; Back to Base</a>
+      </div>
+      
+      <article class="case-file">
+        <header class="case-header">
+          <div class="case-meta-top">
+            <span class="case-stage">STAGE {data.canonicalStage}</span>
+            <div class="card-badges">
+              {data.statuses.map(s => <Badge status={s} />)}
+            </div>
+          </div>
+          
+          <h1 class="case-title">{data.title}</h1>
+          
+          <div class="case-grid-meta">
+            <div class="case-meta-item">
+              <span class="meta-label">Role</span>
+              <span class="meta-value">{data.role}</span>
+            </div>
+            <div class="case-meta-item">
+              <span class="meta-label">Timeline</span>
+              <span class="meta-value">{data.timeline}</span>
+            </div>
+            <div class="case-meta-item">
+              <span class="meta-label">Platform</span>
+              <span class="meta-value">{data.platform}</span>
+            </div>
+            <div class="case-meta-item">
+              <span class="meta-label">Team Size</span>
+              <span class="meta-value">{data.teamSize}</span>
+            </div>
+          </div>
+          
+          <div class="card-chips case-chips">
+            {data.stack.map(tech => <Chip text={tech} />)}
+          </div>
+          
+          <div class="case-actions">
+            {data.links.repo && <a href={data.links.repo} class="btn btn-primary" target="_blank"><Icon name="github" size={16} /> Source Code</a>}
+            {data.links.playStore && <a href={data.links.playStore} class="btn btn-secondary" target="_blank"><Icon name="google-play" size={16} /> Google Play</a>}
+            {data.links.itch && <a href={data.links.itch} class="btn btn-secondary" target="_blank"><Icon name="itch" size={16} /> Play Web Build</a>}
+          </div>
+        </header>
+
+        <!-- Media Hero -->
+        <div class="case-media-hero">
+          {data.media.clipWebm && data.media.clipMp4 ? (
+            <video class="case-video-full" autoplay loop muted playsinline poster={data.media.poster}>
+              <source src={data.media.clipWebm} type="video/webm" />
+              <source src={data.media.clipMp4} type="video/mp4" />
+            </video>
+          ) : (
+            <img src={data.media.poster} alt={`Hero screenshot of ${data.title}`} class="case-img-full" />
+          )}
+        </div>
+
+        <div class="case-content">
+          <section class="case-section">
+            <h2>Mission Brief</h2>
+            <p>{data.mission}</p>
+          </section>
+
+          <section class="case-section">
+            <h2>Key Systems Engineered</h2>
+            <div class="key-systems-grid">
+              {data.keySystems.map(sys => (
+                <div class="key-system-card">
+                  <h3 class="key-system-title">{sys.title}</h3>
+                  <p class="key-system-detail">{sys.detail}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+          
+          {data.bossFight && (
+            <section class="case-section boss-fight-section">
+              <div class="boss-fight-header">
+                <Icon name="bolt" size={24} />
+                <h2>Boss Fight: {data.bossFight.title}</h2>
+              </div>
+              <p>{data.bossFight.detail}</p>
+            </section>
+          )}
+
+          {data.scopeNote && (
+            <section class="case-section scope-note-section">
+              <div class="scope-note-header">
+                <Icon name="gear" size={24} />
+                <h2>Scope Discipline Note</h2>
+              </div>
+              <p><strong>Base Template:</strong> {data.scopeNote.baseName}</p>
+              
+              <div class="scope-grid">
+                <div class="scope-col">
+                  <h4>Provided by Base:</h4>
+                  <ul>
+                    {data.scopeNote.providedByBase.map(item => <li>{item}</li>)}
+                  </ul>
+                </div>
+                <div class="scope-col">
+                  <h4>Engineered by Me:</h4>
+                  <ul>
+                    {data.scopeNote.builtByMe.map(item => <li>{item}</li>)}
+                  </ul>
+                </div>
+              </div>
+            </section>
+          )}
+
+          <section class="case-section">
+            <h2>Implementation Details</h2>
+            <div class="prose">
+              <Content />
+            </div>
+          </section>
+
+          {data.media.gallery && data.media.gallery.length > 0 && (
+            <section class="case-section">
+              <h2>Media Gallery</h2>
+              <Gallery images={data.media.gallery} />
+            </section>
+          )}
+          
+          {data.loot && data.loot.length > 0 && (
+            <section class="case-section loot-section">
+              <h2>Loot & Rewards</h2>
+              <ul>
+                {data.loot.map(item => <li>{item}</li>)}
+              </ul>
+            </section>
+          )}
+        </div>
+      </article>
+      
+      <div class="case-file-footer">
+        {project.id === 'resource-hub' && <Coin id={7} locationHint="End of Resource Hub Case File" />}
+      </div>
+    </div>
+  </div>
+</BaseLayout>

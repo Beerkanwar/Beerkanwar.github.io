@@ -1,0 +1,90 @@
+---
+import RecruiterLayout from '../layouts/RecruiterLayout.astro';
+import { SITE } from '../data/site';
+import { SKILLS } from '../data/skills';
+import { getCollection } from 'astro:content';
+
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects.filter(p => p.data.tier === 'featured').sort((a, b) => a.data.orderDefault - b.data.orderDefault);
+
+const allQuests = await getCollection('quests');
+const sortedQuests = allQuests.sort((a, b) => a.data.order - b.data.order);
+---
+
+<RecruiterLayout title={`Recruiter Mode | ${SITE.name}`}>
+  <div class="recruiter-header">
+    <h1>{SITE.name}</h1>
+    <h2>{SITE.tagline}</h2>
+    
+    <div class="recruiter-meta">
+      <span>{SITE.location}</span> | 
+      <span><a href={`mailto:${SITE.email}`}>{SITE.email}</a></span> | 
+      <span><a href={SITE.links.github} target="_blank">GitHub</a></span> | 
+      <span><a href={SITE.links.linkedin} target="_blank">LinkedIn</a></span>
+    </div>
+    
+    <p class="recruiter-bio">{SITE.description}</p>
+    
+    <div class="recruiter-education">
+      <h3>Education</h3>
+      <p><strong>{SITE.education.degree}</strong></p>
+      <p>{SITE.education.institution} | {SITE.education.timeline}</p>
+    </div>
+  </div>
+
+  <div class="recruiter-section">
+    <h3>Core Technical Skills</h3>
+    <div class="recruiter-skills-grid">
+      {['gamedev', 'systems', 'foundations'].map(branch => {
+        const branchSkills = SKILLS.filter(s => s.branch === branch);
+        if (branchSkills.length === 0) return null;
+        
+        return (
+          <div class="recruiter-skill-col">
+            <h4>{branch === 'gamedev' ? 'Game Dev' : branch === 'systems' ? 'Systems & Backend' : 'Foundations'}</h4>
+            <ul>
+              {branchSkills.map(skill => (
+                <li>{skill.name}</li>
+              ))}
+            </ul>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+
+  <div class="recruiter-section">
+    <h3>Featured Projects</h3>
+    {featuredProjects.map(project => (
+      <div class="recruiter-project">
+        <div class="recruiter-project-header">
+          <h4>{project.data.title}</h4>
+          <span class="recruiter-project-stack">{project.data.stack.join(', ')}</span>
+        </div>
+        <p class="recruiter-project-hook">{project.data.hook}</p>
+        <div class="recruiter-project-links">
+          {project.data.links.repo && <a href={project.data.links.repo} target="_blank">Source Code</a>}
+          {project.data.links.playStore && <a href={project.data.links.playStore} target="_blank">Google Play</a>}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="recruiter-section">
+    <h3>Experience</h3>
+    {sortedQuests.map(quest => (
+      <div class="recruiter-quest">
+        <div class="recruiter-quest-header">
+          <h4>{quest.data.title}</h4>
+          <span class="recruiter-quest-date">{quest.data.dateRange}</span>
+        </div>
+        <p class="recruiter-quest-org">{quest.data.organization} — {quest.data.location}</p>
+        <ul>
+          {quest.data.bullets.map(bullet => (
+            <li set:html={bullet} />
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</RecruiterLayout>

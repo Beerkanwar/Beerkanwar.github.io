@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WipCard from '../components/WipCard.astro';
+import { getCollection } from 'astro:content';
+
+const allWips = await getCollection('wip');
+const sortedWips = allWips.sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Bonus Stage | Beerkanwar">
+  <section class="section section-bonus">
+    <div class="container">
+      <div class="section-header text-center">
+        <h1 class="glitch" data-text="BONUS STAGE">BONUS STAGE</h1>
+        <p class="section-desc">The Development Lab. Projects currently in active engineering.</p>
+        <a href="/" class="btn btn-secondary" style="margin-top: 1rem;">&larr; Back to Main Game</a>
+      </div>
+      
+      <div class="wip-grid-layout">
+        {sortedWips.map(wip => (
+          <WipCard wip={wip} />
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
