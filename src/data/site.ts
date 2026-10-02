@@ -7,7 +7,7 @@ export const SITE = {
     'Portfolio of Beerkanwar: Unity games, backend systems, and applied ML projects. Snake is live on Google Play.',
   tagline: 'I build games — and the systems behind them.',
   metaLine: 'B.Tech CSE · NIT Jalandhar · Unity · Backend · ML',
-  email: 'contact@beerstudios.org',
+  email: 'beer14246@gmail.com',
   location: 'Punjab, India',
   education: {
     degree: 'B.Tech in Computer Science & Engineering',

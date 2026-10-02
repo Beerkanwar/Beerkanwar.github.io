@@ -40,7 +40,7 @@ class AchievementManager {
     }) as EventListener);
 
     // Coin clicks
-    document.querySelectorAll('.coin').forEach(coinEl => {
+    document.querySelectorAll('.pixel-coin').forEach(coinEl => {
       coinEl.addEventListener('click', (e) => {
         const btn = e.currentTarget as HTMLButtonElement;
         const coinId = parseInt(btn.dataset.coinId || '0');
@@ -166,7 +166,7 @@ class AchievementManager {
 
     // Sync coins in DOM
     this.collectedCoins.forEach(id => {
-      const coin = document.querySelector(`.coin[data-coin-id="${id}"]`);
+      const coin = document.querySelector(`.pixel-coin[data-coin-id="${id}"]`);
       if (coin) {
         coin.classList.add('is-collected');
         coin.setAttribute('aria-label', 'Coin Collected');

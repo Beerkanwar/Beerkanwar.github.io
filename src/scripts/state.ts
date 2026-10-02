@@ -117,14 +117,12 @@ class StateManager {
     }
 
     // Grid filters
-    document.querySelectorAll<HTMLButtonElement>('.filter-tab').forEach(tab => {
+    document.querySelectorAll<HTMLButtonElement>('.filter-chip').forEach(tab => {
       tab.addEventListener('click', () => {
-        document.querySelectorAll('.filter-tab').forEach(t => {
-          t.classList.remove('is-active');
-          t.setAttribute('aria-selected', 'false');
+        document.querySelectorAll('.filter-chip').forEach(t => {
+          t.setAttribute('aria-pressed', 'false');
         });
-        tab.classList.add('is-active');
-        tab.setAttribute('aria-selected', 'true');
+        tab.setAttribute('aria-pressed', 'true');
         
         this.filterGrid(tab.dataset.filter || 'all');
       });
@@ -214,7 +212,7 @@ class StateManager {
   
   private filterGridByClass() {
     // If a class is selected, simulate clicking the corresponding filter tab
-    const tab = document.querySelector(`.filter-tab[data-filter="${this.state.playerClass}"]`) as HTMLButtonElement;
+    const tab = document.querySelector(`.filter-chip[data-filter="${this.state.playerClass}"]`) as HTMLButtonElement;
     if (tab) tab.click();
   }
 
@@ -269,7 +267,7 @@ export const stateManager = new StateManager();
 
 // On load, apply class filtering
 document.addEventListener('DOMContentLoaded', () => {
-  const activeTab = document.querySelector('.filter-tab.is-active') as HTMLButtonElement;
+  const activeTab = document.querySelector('.filter-chip[aria-pressed="true"]') as HTMLButtonElement;
   if (activeTab) {
     activeTab.click();
   }
