@@ -1,0 +1,117 @@
+---
+import { SITE } from '../data/site';
+import Hud from '../components/Hud.astro';
+import BottomBar from '../components/BottomBar.astro';
+import Footer from '../components/Footer.astro';
+import ToastContainer from '../components/ToastContainer.astro';
+import Modals from '../components/modals/Modals.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const {
+  title = SITE.title,
+  description = SITE.description,
+  noindex = false,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, SITE.url);
+---
+
+<!doctype html>
+<html lang="en" data-theme="night" data-motion="full" data-arcade="false">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content={SITE.studio} />
+
+    <!-- Preload fonts -->
+    <link rel="preload" href="/fonts/Silkscreen-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/Inter-Variable.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/JetBrainsMono-Bold.woff2" as="font" type="font/woff2" crossorigin />
+
+    <!-- FOUC Prevention: apply saved theme/motion before first paint -->
+    <script is:inline>
+      (function() {
+        try {
+          var s = JSON.parse(localStorage.getItem('beerstudios_save_v1') || '{}');
+          if (s.theme === 'day' || s.theme === 'night') document.documentElement.dataset.theme = s.theme;
+          else if (s.theme === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches) document.documentElement.dataset.theme = 'day';
+          if (s.motion === 'reduced') document.documentElement.dataset.motion = 'reduced';
+          else if (s.motion === 'system' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.dataset.motion = 'reduced';
+          if (s.arcade) document.documentElement.dataset.arcade = 'true';
+        } catch(e) {}
+      })();
+    </script>
+
+    <!-- Styles -->
+    <style>
+      @import '../styles/tokens.css';
+      @import '../styles/base.css';
+      @import '../styles/components.css';
+      @import '../styles/motion.css';
+      @import '../styles/print.css';
+    </style>
+  </head>
+  <body>
+    <!-- Background Starfield -->
+    <div class="starfield hide-on-print" aria-hidden="true">
+      <div class="starfield-layer"></div>
+    </div>
+
+    <Hud />
+    
+    <main id="top">
+      <slot />
+    </main>
+    
+    <Footer />
+    <BottomBar />
+    <Modals />
+    <ToastContainer />
+
+    <!-- Tab blur title swap -->
+    <script is:inline>
+      (function() {
+        var original = document.title;
+        document.addEventListener('visibilitychange', function() {
+          document.title = document.hidden ? 'PAUSED — ' + original : original;
+        });
+      })();
+    </script>
+
+    <!-- Console greeting -->
+    <script is:inline>
+      console.log(
+        '%c⬛ BEER STUDIOS ⬛\n%cbeerstudios.org\n\nLooking at the source? Nice.\nCheck out the repos: https://github.com/Beerkanwar',
+        'font-size:18px;font-weight:bold;color:#FFD23F;background:#14172E;padding:8px 16px;',
+        'font-size:12px;color:#9AA3C7;'
+      );
+    </script>
+
+    <!-- Global Scripts -->
+    <script src="../scripts/state.ts"></script>
+    <script src="../scripts/sound.ts"></script>
+    <script src="../scripts/modals.ts"></script>
+    <script src="../scripts/keyboard.ts"></script>
+    <script src="../scripts/konami.ts"></script>
+    <script src="../scripts/achievements.ts"></script>
+  </body>
+</html>

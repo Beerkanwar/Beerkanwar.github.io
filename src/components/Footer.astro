@@ -1,0 +1,43 @@
+---
+import Icon from './Icon.astro';
+import { SITE } from '../data/site';
+import Coin from './Coin.astro';
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer hide-on-print">
+  <div class="container">
+    <div class="footer-grid">
+      <!-- Left: Copyright & Secret Coin -->
+      <div class="footer-left">
+        <span>&copy; {currentYear} {SITE.name}</span>
+        <Coin id={6} locationHint="Footer copyright area" />
+      </div>
+
+      <!-- Center: Built with -->
+      <div class="footer-center">
+        <span>Built with Astro & Vanilla CSS</span><br/>
+        <span class="text-muted" style="font-size: 10px;">No Tailwind. No UI frameworks. No bloat.</span>
+        
+        <div id="bonus-reveal-container" hidden>
+          <a href="/bonus-stage" class="bonus-link" data-astro-reload>Enter Bonus Stage</a>
+        </div>
+      </div>
+
+      <!-- Right: Actions -->
+      <div class="footer-right">
+        <div>
+          <button type="button" class="footer-action" data-open-modal="modal-controls">
+            <Icon name="key" size={16} /> Keyboard Shortcuts (?)
+          </button>
+        </div>
+        <div>
+          <a href="#top" class="footer-action">
+            <Icon name="arrow-up" size={16} /> Back to Top
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

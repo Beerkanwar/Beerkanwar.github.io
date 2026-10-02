@@ -1,0 +1,42 @@
+---
+import Icon from '../Icon.astro';
+---
+
+<dialog id="modal-class" class="pixel-modal">
+  <div class="pixel-modal-header">
+    <h3>Select Player Class</h3>
+    <button type="button" class="pixel-modal-close" data-close-modal aria-label="Close modal">&times;</button>
+  </div>
+  <div class="pixel-modal-body">
+    <p class="class-select-note">Your class determines which skills and projects are highlighted throughout the site.</p>
+    
+    <div class="class-options" role="radiogroup" aria-labelledby="class-group-label">
+      <label class="class-option class-option--all is-selected">
+        <input type="radio" name="playerClass" value="all" checked />
+        <div class="class-option-icon"><Icon name="star" size={24} /></div>
+        <div class="class-option-text">
+          <span class="class-option-title">Explore All (Default)</span>
+          <span class="class-option-desc">Shows all projects in chronological order.</span>
+        </div>
+      </label>
+
+      <label class="class-option class-option--gameplay">
+        <input type="radio" name="playerClass" value="gameplay" />
+        <div class="class-option-icon" style="color: var(--track-gameplay);"><Icon name="controller" size={24} /></div>
+        <div class="class-option-text">
+          <span class="class-option-title">Gameplay Engineer</span>
+          <span class="class-option-desc">Prioritizes Unity, C#, physics, and core game loops.</span>
+        </div>
+      </label>
+
+      <label class="class-option class-option--systems">
+        <input type="radio" name="playerClass" value="systems" />
+        <div class="class-option-icon" style="color: var(--track-systems);"><Icon name="gear" size={24} /></div>
+        <div class="class-option-text">
+          <span class="class-option-title">Systems / Backend</span>
+          <span class="class-option-desc">Prioritizes architecture, APIs, netcode, and ML pipelines.</span>
+        </div>
+      </label>
+    </div>
+  </div>
+</dialog>

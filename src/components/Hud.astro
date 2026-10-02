@@ -1,0 +1,56 @@
+---
+import Icon from './Icon.astro';
+import { SITE } from '../data/site';
+---
+
+<header class="hud hide-on-print">
+  <a href="#top" class="skip-link">Skip to Content</a>
+  <div class="hud-inner">
+    
+    <!-- Left: Logo -->
+    <a href="/#top" class="hud-logo" aria-label="Go to home" data-logo-click>
+      <Icon name="controller" size={24} />
+      <span class="hud-logo-wordmark">{SITE.studio}</span>
+    </a>
+
+    <!-- Center: Desktop Nav -->
+    <nav class="hud-nav" aria-label="Primary Desktop Navigation">
+      <a href="/#levels" data-nav-target="levels">Levels</a>
+      <a href="/#skills" data-nav-target="skills">Skills</a>
+      <a href="/#quests" data-nav-target="quests">Quests</a>
+      <a href="/#about" data-nav-target="about">About</a>
+      <a href="/#contact" data-nav-target="contact">Contact</a>
+    </nav>
+
+    <!-- Right: Utility Actions -->
+    <div class="hud-right">
+      <!-- Player Class Indicator (Triggers modal) -->
+      <button type="button" class="hud-btn" data-open-modal="modal-class" aria-label="Change Player Class">
+        <Icon name="star" size={16} />
+        <span class="hud-btn-label" id="hud-class-label">All</span>
+      </button>
+
+      <!-- Recruiter Mode Link -->
+      <a href="/recruiter" class="hud-btn hud-recruiter-btn">
+        <Icon name="bolt" size={16} />
+        <span class="hud-btn-label">Recruiter Mode</span>
+      </a>
+
+      <!-- Coins counter -->
+      <button type="button" class="hud-coins" data-open-modal="modal-achievements" aria-label="View achievements and coins">
+        <Icon name="coin" size={16} />
+        <span id="hud-coin-count">0/7</span>
+      </button>
+
+      <!-- Settings -->
+      <button type="button" class="hud-btn" data-open-modal="modal-settings" aria-label="Settings">
+        <Icon name="gear" size={16} />
+      </button>
+    </div>
+  </div>
+
+  <!-- XP Progress Bar -->
+  <div class="xp-bar" aria-hidden="true">
+    <div class="xp-bar-fill" id="xp-fill"></div>
+  </div>
+</header>

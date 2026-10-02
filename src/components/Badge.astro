@@ -1,0 +1,17 @@
+---
+interface Props {
+  status: string;
+}
+
+const { status } = Astro.props;
+
+let badgeClass = 'badge-prototype';
+if (status === 'SHIPPED') badgeClass = 'badge-shipped';
+else if (status === 'PLAYABLE') badgeClass = 'badge-playable';
+else if (status === 'JAM') badgeClass = 'badge-jam';
+else if (status === 'TUTORIAL-BASED') badgeClass = 'badge-tutorial';
+else if (status === 'TEMPLATE-BASED') badgeClass = 'badge-template';
+else if (status === 'IN PROGRESS') badgeClass = 'badge-in-progress';
+---
+
+<span class={`badge ${badgeClass}`}>{status}</span>

@@ -1,0 +1,26 @@
+---
+import { ACHIEVEMENTS } from '../../data/achievements';
+import Icon from '../Icon.astro';
+---
+
+<dialog id="modal-achievements" class="pixel-modal">
+  <div class="pixel-modal-header">
+    <h3>Achievements (<span id="achievement-count-display">0</span>/11)</h3>
+    <button type="button" class="pixel-modal-close" data-close-modal aria-label="Close modal">&times;</button>
+  </div>
+  <div class="pixel-modal-body">
+    <div id="achievements-list">
+      {ACHIEVEMENTS.map(ach => (
+        <div class="achievement-card is-locked" data-achievement-id={ach.id}>
+          <div class="achievement-icon">
+            <Icon name={ach.icon} size={24} />
+          </div>
+          <div class="achievement-info">
+            <div class="achievement-title">{ach.title}</div>
+            <div class="achievement-desc">{ach.description}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</dialog>

@@ -1,0 +1,26 @@
+---
+import Icon from './Icon.astro';
+---
+
+<nav class="bottom-bar hide-on-print" aria-label="Mobile Navigation">
+  <a href="/#levels" class="bottom-bar-item" data-nav-target="levels">
+    <Icon name="folder" size={24} />
+    <span>Levels</span>
+  </a>
+  <a href="/#skills" class="bottom-bar-item" data-nav-target="skills">
+    <Icon name="star" size={24} />
+    <span>Skills</span>
+  </a>
+  <a href="/#quests" class="bottom-bar-item" data-nav-target="quests">
+    <Icon name="check" size={24} />
+    <span>Quests</span>
+  </a>
+  <a href="/#contact" class="bottom-bar-item" data-nav-target="contact">
+    <Icon name="mail" size={24} />
+    <span>Contact</span>
+  </a>
+  <button type="button" class="bottom-bar-item" data-open-modal="modal-settings" aria-label="Settings">
+    <Icon name="gear" size={24} />
+    <span>Settings</span>
+  </button>
+</nav>

@@ -1,0 +1,71 @@
+---
+---
+
+<dialog id="modal-settings" class="pixel-modal">
+  <div class="pixel-modal-header">
+    <h3>System Settings</h3>
+    <button type="button" class="pixel-modal-close" data-close-modal aria-label="Close modal">&times;</button>
+  </div>
+  <div class="pixel-modal-body">
+    
+    <div class="settings-group">
+      <span class="settings-label">Theme</span>
+      <div class="settings-options" role="radiogroup" aria-label="Theme selection">
+        <label class="settings-option" data-theme-btn="system">
+          <input type="radio" name="theme" value="system" class="sr-only" /> System
+        </label>
+        <label class="settings-option" data-theme-btn="night">
+          <input type="radio" name="theme" value="night" class="sr-only" /> Night
+        </label>
+        <label class="settings-option" data-theme-btn="day">
+          <input type="radio" name="theme" value="day" class="sr-only" /> Day
+        </label>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <span class="settings-label">Motion</span>
+      <div class="settings-options" role="radiogroup" aria-label="Motion preference">
+        <label class="settings-option" data-motion-btn="system">
+          <input type="radio" name="motionPref" value="system" class="sr-only" /> System
+        </label>
+        <label class="settings-option" data-motion-btn="full">
+          <input type="radio" name="motionPref" value="full" class="sr-only" /> Full
+        </label>
+        <label class="settings-option" data-motion-btn="reduced">
+          <input type="radio" name="motionPref" value="reduced" class="sr-only" /> Reduced
+        </label>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <span class="settings-label">Audio</span>
+      <div class="settings-toggle">
+        <span class="settings-toggle-label">Sound Effects</span>
+        <button type="button" class="settings-toggle-btn" id="btn-toggle-sound" aria-pressed="false">OFF</button>
+      </div>
+      <label class="sr-only" for="volume-slider">Volume</label>
+      <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.1" value="0.5" disabled />
+    </div>
+
+    <div class="settings-group">
+      <span class="settings-label">Advanced</span>
+      
+      <div class="settings-toggle">
+        <span class="settings-toggle-label">Keyboard Shortcuts</span>
+        <button type="button" class="settings-toggle-btn is-on" id="btn-toggle-keyboard" aria-pressed="true">ON</button>
+      </div>
+      
+      <div class="settings-toggle">
+        <span class="settings-toggle-label">Show Hidden Coins</span>
+        <button type="button" class="settings-toggle-btn" id="btn-toggle-coins" aria-pressed="false">OFF</button>
+      </div>
+
+      <div class="settings-toggle">
+        <span class="settings-toggle-label">Arcade Mode (CRT)</span>
+        <button type="button" class="settings-toggle-btn" id="btn-toggle-arcade" aria-pressed="false">OFF</button>
+      </div>
+    </div>
+
+  </div>
+</dialog>
