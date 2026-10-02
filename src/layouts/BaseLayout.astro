@@ -6,6 +6,12 @@ import Footer from '../components/Footer.astro';
 import ToastContainer from '../components/ToastContainer.astro';
 import Modals from '../components/modals/Modals.astro';
 
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/components.css';
+import '../styles/motion.css';
+import '../styles/print.css';
+
 interface Props {
   title?: string;
   description?: string;
@@ -42,10 +48,10 @@ const canonicalURL = new URL(Astro.url.pathname, SITE.url);
     <meta property="og:site_name" content={SITE.studio} />
 
     <!-- Preload fonts -->
-    <link rel="preload" href="/fonts/Silkscreen-Regular.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/Inter-Variable.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/JetBrainsMono-Bold.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/Silkscreen-Regular.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/fonts/Inter-Variable.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/fonts/JetBrainsMono-Regular.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/fonts/JetBrainsMono-Bold.ttf" as="font" type="font/ttf" crossorigin />
 
     <!-- FOUC Prevention: apply saved theme/motion before first paint -->
     <script is:inline>
@@ -61,14 +67,7 @@ const canonicalURL = new URL(Astro.url.pathname, SITE.url);
       })();
     </script>
 
-    <!-- Styles -->
-    <style>
-      @import '../styles/tokens.css';
-      @import '../styles/base.css';
-      @import '../styles/components.css';
-      @import '../styles/motion.css';
-      @import '../styles/print.css';
-    </style>
+
   </head>
   <body>
     <!-- Background Starfield -->
