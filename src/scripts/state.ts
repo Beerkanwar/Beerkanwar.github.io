@@ -135,6 +135,30 @@ class StateManager {
         this.sortGrid(sortSelect.value);
       });
     }
+
+    // Skill Nodes Interactive Map
+    document.querySelectorAll<HTMLButtonElement>('.skill-node').forEach(node => {
+      node.addEventListener('click', () => {
+        const projects = node.dataset.projects?.split(',').filter(Boolean) || [];
+        
+        // Remove highlight from all cards
+        document.querySelectorAll('.card').forEach(card => card.classList.remove('highlighted-skill'));
+        
+        if (node.classList.contains('active')) {
+          node.classList.remove('active');
+        } else {
+          document.querySelectorAll('.skill-node').forEach(n => n.classList.remove('active'));
+          node.classList.add('active');
+          
+          projects.forEach(p => {
+            const card = document.getElementById(`project-${p.trim()}`);
+            if (card) {
+              card.classList.add('highlighted-skill');
+            }
+          });
+        }
+      });
+    });
   }
 
   private applyState(isInitial = false) {

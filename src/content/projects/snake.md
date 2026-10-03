@@ -32,18 +32,18 @@ loot:
   - "Includes an isolated 12-segment autonomous 'attract mode' AI snake (AISnakeController) on the start menu running a 30% turn / 70% straight weighted random walk with its own death/respawn VFX coroutine loop."
   - "Persists audio mute, haptics, and live dark/light theme toggles via PlayerPrefs with a static OnThemeChanged event bus."
 media:
-  poster: "/media/projects/snake/poster.webp"
+  poster: "/media/projects/snake-poster.png"
   clipWebm: "/media/projects/snake/clip.webm"
   clipMp4: "/media/projects/snake/clip.mp4"
   architectureSvgId: "snake-arch"
   gallery:
-    - src: "/media/projects/snake/screen-1.webp"
+    - src: "/media/projects/snake/screen-1.png"
       alt: "Snake gameplay on Android"
       caption: "Live gameplay on Android"
-    - src: "/media/projects/snake/screen-2.webp"
+    - src: "/media/projects/snake/screen-2.png"
       alt: "Snake start menu with AI snake"
       caption: "Start menu attract mode"
-    - src: "/media/projects/snake/screen-3.webp"
+    - src: "/media/projects/snake/screen-3.png"
       alt: "Snake game over screen"
       caption: "Game over with score"
 ---

@@ -15,15 +15,7 @@ import Coin from '../Coin.astro';
       <!-- Player Card -->
       <div class="player-card">
         <div class="player-avatar-frame">
-          <svg class="player-avatar-svg" viewBox="0 0 16 16" width="160" height="160" xmlns="http://www.w3.org/2000/svg">
-            <rect width="16" height="16" fill="#14172E" />
-            <!-- Very basic 16x16 pixel avatar -->
-            <path d="M4 2h8v3h2v4h-2v5H4v-5H2V5h2V2z" fill="#9AA3C7" />
-            <path d="M5 3h6v4H5V3z" fill="#FFF" />
-            <rect x="6" y="4" width="1" height="1" fill="#14172E" />
-            <rect x="9" y="4" width="1" height="1" fill="#14172E" />
-            <rect x="7" y="6" width="2" height="1" fill="#F03A47" />
-          </svg>
+          <img src="/media/portrait.png" alt="Beerkanwar Singh" class="player-avatar-svg" style="width: 160px; height: 160px; object-fit: cover;" />
           <div class="coin-container-avatar"><Coin id={4} locationHint="Inside Player Avatar Frame" /></div>
         </div>
         
