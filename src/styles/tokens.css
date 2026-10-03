@@ -21,6 +21,11 @@
   --track-gameplay: #B388FF;
   --track-systems: #6EE7A0;
   --shadow-pixel: #05060F;
+
+  /* Aliases for backwards compatibility with appended classes */
+  --text-main: var(--text);
+  --accent-green: var(--track-systems);
+  --bg-hover: var(--panel-raised);
 }
 
 /* --- Color Palette: Day Mode --- */

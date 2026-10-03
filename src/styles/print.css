@@ -31,7 +31,8 @@
   .boot-overlay,
   .xp-bar,
   .recruiter-topbar,
-  .skip-link {
+  .skip-link,
+  .hide-on-print {
     display: none !important;
   }
 
