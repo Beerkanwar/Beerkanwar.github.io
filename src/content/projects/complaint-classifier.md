@@ -7,10 +7,10 @@ orderDefault: 4
 orderGameplay: 5
 orderSystems: 2
 statuses: ["PROTOTYPE"]
-role: "Full-Stack & Applied ML Engineer"
+role: "ML-focused role (did not handle frontend)"
 timeline: "2025"
 platform: "Web Application (Node.js + Python FastAPI Microservice)"
-teamSize: "1 (Solo)"
+teamSize: "2"
 stack: ["Node.js", "Express", "Python", "FastAPI", "scikit-learn", "TF-IDF"]
 links:
   repo: "https://github.com/Beerkanwar/ComplaintPortal"

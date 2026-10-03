@@ -6,11 +6,11 @@ canonicalStage: "1-3"
 orderDefault: 3
 orderGameplay: 4
 orderSystems: 3
-statuses: ["PROTOTYPE"]
+statuses: ["SHIPPED"]
 role: "Software / Systems Engineer"
 timeline: "2025 – 2026"
 platform: "Windows Desktop (.NET 8.0 / WPF)"
-teamSize: "1 (Solo)"
+teamSize: "3"
 stack: ["C# 12", ".NET 8.0", "WPF (MVVM)", "SQLite", "LiveChartsCore", "Dependency Injection"]
 links:
   repo: "https://github.com/Beerkanwar/AlgorithmBenchmarker"

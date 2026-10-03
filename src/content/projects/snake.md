@@ -8,7 +8,7 @@ orderGameplay: 1
 orderSystems: 5
 statuses: ["SHIPPED"]
 role: "Solo Game Developer (Beer Studios)"
-timeline: "2025 (Live on Google Play)"
+timeline: "June 2026 – Aug 2026 (live Aug 2026)"
 platform: "Android (Google Play) & Windows PC"
 teamSize: "1 (Solo)"
 stack: ["Unity", "C#", "URP", "New Input System", "Odin Inspector", "Android"]

@@ -26,7 +26,7 @@ const data = quest.data;
   <div class="quest-body">
     <ul class="quest-bullets">
       {data.bullets.map(bullet => (
-        <li set:html={bullet} />
+        <li set:html={bullet.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')} />
       ))}
     </ul>
     

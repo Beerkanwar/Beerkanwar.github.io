@@ -81,7 +81,7 @@ const sortedQuests = allQuests.sort((a, b) => a.data.order - b.data.order);
         <p class="recruiter-quest-org">{quest.data.organization} — {quest.data.location}</p>
         <ul>
           {quest.data.bullets.map(bullet => (
-            <li set:html={bullet} />
+            <li set:html={bullet.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')} />
           ))}
         </ul>
       </div>

@@ -178,6 +178,9 @@ class StateManager {
     }
     root.dataset.motion = activeMotion;
 
+    // Show coins
+    root.dataset.showCoins = this.state.showCoins.toString();
+
     // Arcade
     root.dataset.arcade = this.state.arcadeMode.toString();
 
@@ -238,25 +241,27 @@ class StateManager {
     if (!this.state.playerClass) return;
     
     // Sort logic using Player Class orders if specified
-    const grid = document.getElementById('project-grid');
-    if (!grid) return;
-    
-    const cards = Array.from(grid.querySelectorAll('.card-wrapper')) as HTMLElement[];
-    if (this.state.playerClass === 'gameplay') {
-      cards.sort((a, b) => {
-        const orderA = parseInt(a.querySelector('.card')?.getAttribute('data-order-gameplay') || '999');
-        const orderB = parseInt(b.querySelector('.card')?.getAttribute('data-order-gameplay') || '999');
-        return orderA - orderB;
-      });
-    } else if (this.state.playerClass === 'systems') {
-      cards.sort((a, b) => {
-        const orderA = parseInt(a.querySelector('.card')?.getAttribute('data-order-systems') || '999');
-        const orderB = parseInt(b.querySelector('.card')?.getAttribute('data-order-systems') || '999');
-        return orderA - orderB;
-      });
-    }
-    
-    cards.forEach(card => grid.appendChild(card));
+    ['grid-featured', 'grid-side'].forEach(gridId => {
+      const grid = document.getElementById(gridId);
+      if (!grid) return;
+      
+      const cards = Array.from(grid.querySelectorAll('.card')) as HTMLElement[];
+      if (this.state.playerClass === 'gameplay') {
+        cards.sort((a, b) => {
+          const orderA = parseInt(a.getAttribute('data-order-gameplay') || '999');
+          const orderB = parseInt(b.getAttribute('data-order-gameplay') || '999');
+          return orderA - orderB;
+        });
+      } else if (this.state.playerClass === 'systems') {
+        cards.sort((a, b) => {
+          const orderA = parseInt(a.getAttribute('data-order-systems') || '999');
+          const orderB = parseInt(b.getAttribute('data-order-systems') || '999');
+          return orderA - orderB;
+        });
+      }
+      
+      cards.forEach(card => grid.appendChild(card));
+    });
     
     // If a class is selected, simulate clicking the corresponding filter tab
     const tab = document.querySelector(`.filter-chip[data-filter="${this.state.playerClass}"]`) as HTMLButtonElement;
@@ -291,7 +296,11 @@ class StateManager {
       const cards = Array.from(grid.querySelectorAll('.card')) as HTMLElement[];
       cards.sort((a, b) => {
         if (sortMode === 'stage') {
-          return a.querySelector('.card-stage')!.textContent!.localeCompare(b.querySelector('.card-stage')!.textContent!);
+          const stageA = (a.querySelector('.card-stage')?.textContent || '').replace('STAGE ', '').split('-');
+          const stageB = (b.querySelector('.card-stage')?.textContent || '').replace('STAGE ', '').split('-');
+          const wA = parseInt(stageA[0] || '0', 10), lA = parseInt(stageA[1] || '0', 10);
+          const wB = parseInt(stageB[0] || '0', 10), lB = parseInt(stageB[1] || '0', 10);
+          return wA !== wB ? wA - wB : lA - lB;
         } else {
           return parseInt(a.dataset.order || '0') - parseInt(b.dataset.order || '0');
         }

@@ -10,7 +10,7 @@ statuses: ["PROTOTYPE"]
 role: "Full-Stack & Backend Security Engineer"
 timeline: "2025 – 2026"
 platform: "Full-Stack Web (React 19 + Express + MongoDB + Docker)"
-teamSize: "1 (Solo)"
+teamSize: "2"
 stack: ["Node.js", "Express", "MongoDB", "React 19", "Docker Compose", "Jest / Supertest", "JWT & RBAC", "Tailwind CSS 4"]
 links:
   repo: "https://github.com/Beerkanwar/AcademicResourceExchangeSystem"

@@ -7,14 +7,14 @@ orderDefault: 12
 orderGameplay: 12
 orderSystems: 11
 statuses: ["JAM", "TEMPLATE-BASED", "PLAYABLE"]
-role: "Solo Game Jam Developer"
-timeline: "GMTK Game Jam"
+role: "Programmer"
+timeline: "GMTK Game Jam 2026"
 platform: "WebGL (itch.io) & Windows · Unity 6"
-teamSize: "1 (Solo)"
+teamSize: "2"
 stack: ["Unity 6 (6000.5.4f1)", "C#", "URP", "New Input System", "Tiled (.tmx)", "Aseprite"]
 links:
   itch: "https://beer-23.itch.io/bomb-massacre"
-  itchEmbedUrl: "https://beer-23.itch.io/bomb-massacre"
+  itchEmbedUrl: "https://itch.io/embed-upload/18550070?color=333333"
   repo: "https://github.com/Beerkanwar/BombMassacre"
 controlsText: "WASD / Arrow Keys: Move · Space: Jump · B: Pick Up / Throw Bomb · Esc: Pause"
 hook: "A GMTK Game Jam 2D platformer where the longer you carry a bomb before throwing it, the larger its terrain-carving blast radius grows."
@@ -58,3 +58,4 @@ The `DestroyTilesInRadius` algorithm converts world-space positions to tilemap c
 ### Scope Discipline
 
 The planned boss fight was deliberately cut mid-jam to focus on polishing the core mechanic, defensive fallbacks (procedural explosion sprites), and level design quality.
+

@@ -54,9 +54,12 @@ class AchievementManager {
             (window as any).SoundManager.play('coin');
           }
           
-          this.saveState();
-          this.updateUI();
-          this.checkCoinAchievements();
+          setTimeout(() => {
+            btn.classList.add('is-hidden');
+            this.saveState();
+            this.updateUI();
+            this.checkCoinAchievements();
+          }, 800);
         }
       });
     });
@@ -135,11 +138,17 @@ class AchievementManager {
   }
 
   private updateUI() {
-    // HUD coin counter
     const counter = document.getElementById('hud-coin-count');
     if (counter) {
-      counter.textContent = this.collectedCoins.size.toString();
+      counter.textContent = `${this.collectedCoins.size}/7`;
     }
+
+    document.querySelectorAll('.pixel-coin').forEach(c => {
+      const id = parseInt((c as HTMLButtonElement).dataset.coinId || '0');
+      if (this.collectedCoins.has(id)) {
+        c.classList.add('is-hidden');
+      }
+    });
     
     // HUD XP Bar
     const xpFill = document.getElementById('xp-fill');

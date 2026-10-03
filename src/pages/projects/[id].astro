@@ -154,11 +154,8 @@ const hasPoster = fs.existsSync(posterPath);
             <h2>Implementation Details</h2>
             
             {data.media.architectureSvgId && (
-              <div style="margin-bottom: 2rem;">
-                <!-- Usually we'd inline the SVG here, but a placeholder or image works -->
-                <div style="background: var(--bg-deep); padding: 1rem; border: 1px solid var(--border); text-align: center; color: var(--muted);">
-                  [Architecture Diagram: {data.media.architectureSvgId}]
-                </div>
+              <div style="margin-bottom: 2rem; border: 1px solid var(--border); padding: 1rem; background: var(--bg-deep);">
+                <img src={`/media/projects/${data.media.architectureSvgId}.svg`} alt="Architecture Diagram" style="width: 100%; height: auto;" />
               </div>
             )}
             
