@@ -275,7 +275,7 @@ class StateManager {
       const track = card.dataset.track;
       
       if (filter === 'all' || track === filter || track === 'both') {
-        card.style.display = 'flex';
+        card.style.display = '';
         visibleCount++;
       } else {
         card.style.display = 'none';

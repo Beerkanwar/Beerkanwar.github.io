@@ -7,10 +7,61 @@ class AchievementManager {
   private totalAchievements = ACHIEVEMENTS.length;
 
   constructor() {
-    this.toastContainer = document.getElementById('toast-container');
     this.loadState();
     this.bindEvents();
+    
+    // Initial setup
+    this.toastContainer = document.getElementById('toast-container');
+    this.rebindDOM();
     this.updateUI();
+    
+    // Re-bind DOM elements on view transition
+    document.addEventListener('astro:page-load', () => {
+      this.toastContainer = document.getElementById('toast-container');
+      this.rebindDOM();
+      this.updateUI();
+    });
+  }
+
+  private rebindDOM() {
+    // Coin clicks (using event delegation to avoid double binding is safer, 
+    // but here we just safely bind if not bound)
+    document.querySelectorAll('.pixel-coin').forEach(coinEl => {
+      const btn = coinEl as HTMLButtonElement;
+      if (btn.dataset.bound) return;
+      btn.dataset.bound = 'true';
+      btn.addEventListener('click', (e) => {
+        const coinId = parseInt(btn.dataset.coinId || '0');
+        if (coinId && !this.collectedCoins.has(coinId)) {
+          this.collectedCoins.add(coinId);
+          btn.classList.add('is-collected');
+          btn.setAttribute('aria-label', 'Coin Collected');
+          
+          if ((window as any).SoundManager) {
+            (window as any).SoundManager.play('coin');
+          }
+          
+          btn.classList.add('is-hidden');
+          this.saveState();
+          this.updateUI();
+          this.checkCoinAchievements();
+        }
+      });
+    });
+
+    // Email copy
+    const copyBtn = document.getElementById('btn-copy-email');
+    if (copyBtn && !copyBtn.dataset.bound) {
+      copyBtn.dataset.bound = 'true';
+      copyBtn.addEventListener('click', () => {
+        const emailInput = document.getElementById('contact-email-input') as HTMLInputElement;
+        if (emailInput) {
+          navigator.clipboard.writeText(emailInput.value).then(() => {
+            this.unlock('hello-world');
+          });
+        }
+      });
+    }
   }
 
   private loadState() {
@@ -38,46 +89,6 @@ class AchievementManager {
     window.addEventListener('achievement-unlocked', ((e: CustomEvent) => {
       this.unlock(e.detail.id);
     }) as EventListener);
-
-    // Coin clicks
-    document.querySelectorAll('.pixel-coin').forEach(coinEl => {
-      coinEl.addEventListener('click', (e) => {
-        const btn = e.currentTarget as HTMLButtonElement;
-        const coinId = parseInt(btn.dataset.coinId || '0');
-        
-        if (coinId && !this.collectedCoins.has(coinId)) {
-          this.collectedCoins.add(coinId);
-          btn.classList.add('is-collected');
-          btn.setAttribute('aria-label', 'Coin Collected');
-          
-          if ((window as any).SoundManager) {
-            (window as any).SoundManager.play('coin');
-          }
-          
-          setTimeout(() => {
-            btn.classList.add('is-hidden');
-            this.saveState();
-            this.updateUI();
-            this.checkCoinAchievements();
-          }, 800);
-        }
-      });
-    });
-
-    // Email copy
-    const copyBtn = document.getElementById('btn-copy-email');
-    if (copyBtn) {
-      copyBtn.addEventListener('click', () => {
-        const emailInput = document.getElementById('contact-email-input') as HTMLInputElement;
-        if (emailInput) {
-          navigator.clipboard.writeText(emailInput.value).then(() => {
-            this.unlock('hello-world');
-          });
-        }
-      });
-    }
-
-
   }
 
   private checkCoinAchievements() {
@@ -106,6 +117,7 @@ class AchievementManager {
   }
 
   private showToast(achievement: typeof ACHIEVEMENTS[0]) {
+    this.toastContainer = document.getElementById('toast-container');
     if (!this.toastContainer) return;
     
     const toast = document.createElement('div');

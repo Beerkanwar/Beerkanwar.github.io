@@ -9,7 +9,7 @@ const sortedWips = allWips.sort((a, b) => a.data.order - b.data.order);
 
 <BaseLayout title="Bonus Stage | Beerkanwar" noindex={true}>
   <section class="section section-bonus">
-    <div class="container">
+    <div style="padding-inline: var(--container-px);">
       <div class="section-header text-center">
         <h1 class="glitch" data-text="BONUS STAGE">BONUS STAGE</h1>
         <p class="section-desc">The Development Lab. Projects currently in active engineering.</p>
@@ -25,6 +25,8 @@ const sortedWips = allWips.sort((a, b) => a.data.order - b.data.order);
   </section>
 
   <script is:inline>
-    window.dispatchEvent(new CustomEvent('achievement-unlocked', { detail: { id: 'bonus-round' } }));
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('achievement-unlocked', { detail: { id: 'bonus-round' } }));
+    }, 500);
   </script>
 </BaseLayout>

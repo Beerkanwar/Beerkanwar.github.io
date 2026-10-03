@@ -89,6 +89,8 @@ const sortedQuests = allQuests.sort((a, b) => a.data.order - b.data.order);
   </div>
 
   <script is:inline>
-    window.dispatchEvent(new CustomEvent('achievement-unlocked', { detail: { id: 'efficient' } }));
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('achievement-unlocked', { detail: { id: 'efficient' } }));
+    }, 500);
   </script>
 </RecruiterLayout>

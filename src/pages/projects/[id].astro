@@ -28,7 +28,7 @@ const hasPoster = fs.existsSync(posterPath);
 
 <BaseLayout title={`${data.title} | Case File`}>
   <div class="case-file-wrapper">
-    <div class="container">
+    <div style="padding-inline: var(--container-px);">
       <div class="case-file-nav">
         <a href="/#levels" class="btn btn-secondary">&larr; Back to Base</a>
       </div>
@@ -205,7 +205,7 @@ const hasPoster = fs.existsSync(posterPath);
   </div>
 
   <script is:inline>
-    (function() {
+    setTimeout(() => {
       const id = window.location.pathname.split('/').filter(Boolean).pop();
       if (!id) return;
       let viewed = [];
@@ -229,6 +229,6 @@ const hasPoster = fs.existsSync(posterPath);
       if (viewed.length >= 12 && isNew) {
         window.dispatchEvent(new CustomEvent('achievement-unlocked', { detail: { id: 'completionist' } }));
       }
-    })();
+    }, 500);
   </script>
 </BaseLayout>
