@@ -62,8 +62,18 @@ import Icon from '../components/Icon.astro';
       }
 
       function placeApple() {
-        apple.x = Math.floor(Math.random() * (canvas.width / gridSize));
-        apple.y = Math.floor(Math.random() * (canvas.height / gridSize));
+        let placed = false;
+        while (!placed) {
+          apple.x = Math.floor(Math.random() * (canvas.width / gridSize));
+          apple.y = Math.floor(Math.random() * (canvas.height / gridSize));
+          placed = true;
+          for (let i = 0; i < snake.length; i++) {
+            if (snake[i].x === apple.x && snake[i].y === apple.y) {
+              placed = false;
+              break;
+            }
+          }
+        }
       }
 
       function gameLoop() {

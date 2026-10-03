@@ -20,7 +20,7 @@ class KonamiCode {
   }
 
   private activate() {
-    window.dispatchEvent(new CustomEvent('achievement-unlocked', { detail: { id: 'konami-code' }}));
+    window.dispatchEvent(new CustomEvent('achievement-unlocked', { detail: { id: 'old-school' }}));
     
     const arcadeBtn = document.getElementById('btn-toggle-arcade');
     if (arcadeBtn && !arcadeBtn.classList.contains('is-on')) {

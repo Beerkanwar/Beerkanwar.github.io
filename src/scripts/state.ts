@@ -211,6 +211,29 @@ class StateManager {
   }
   
   private filterGridByClass() {
+    if (!this.state.playerClass) return;
+    
+    // Sort logic using Player Class orders if specified
+    const grid = document.getElementById('project-grid');
+    if (!grid) return;
+    
+    const cards = Array.from(grid.querySelectorAll('.card-wrapper')) as HTMLElement[];
+    if (this.state.playerClass === 'gameplay') {
+      cards.sort((a, b) => {
+        const orderA = parseInt(a.querySelector('.card')?.getAttribute('data-order-gameplay') || '999');
+        const orderB = parseInt(b.querySelector('.card')?.getAttribute('data-order-gameplay') || '999');
+        return orderA - orderB;
+      });
+    } else if (this.state.playerClass === 'systems') {
+      cards.sort((a, b) => {
+        const orderA = parseInt(a.querySelector('.card')?.getAttribute('data-order-systems') || '999');
+        const orderB = parseInt(b.querySelector('.card')?.getAttribute('data-order-systems') || '999');
+        return orderA - orderB;
+      });
+    }
+    
+    cards.forEach(card => grid.appendChild(card));
+    
     // If a class is selected, simulate clicking the corresponding filter tab
     const tab = document.querySelector(`.filter-chip[data-filter="${this.state.playerClass}"]`) as HTMLButtonElement;
     if (tab) tab.click();
@@ -246,8 +269,7 @@ class StateManager {
         if (sortMode === 'stage') {
           return a.querySelector('.card-stage')!.textContent!.localeCompare(b.querySelector('.card-stage')!.textContent!);
         } else {
-          // Default: rely on DOM order or data-order if we had added it
-          return 0; 
+          return parseInt(a.dataset.order || '0') - parseInt(b.dataset.order || '0');
         }
       });
       

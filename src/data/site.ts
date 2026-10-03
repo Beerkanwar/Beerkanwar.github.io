@@ -1,5 +1,5 @@
 export const SITE = {
-  name: 'Beerkanwar',
+  name: 'Beerkanwar Singh',
   studio: 'Beer Studios',
   url: 'https://beerstudios.org',
   title: 'Beerkanwar — Gameplay & Systems Engineer',
@@ -21,7 +21,7 @@ export const SITE = {
   responseTime: 'Usually responds within 48 hours',
   links: {
     github: 'https://github.com/Beerkanwar',
-    linkedin: 'https://www.linkedin.com/in/beerkanwar',
+    linkedin: 'https://www.linkedin.com/in/beerkanwar-singh-627836285/',
     itch: 'https://beer-23.itch.io',
     bombMassacreItch: 'https://beer-23.itch.io/bomb-massacre',
     googlePlaySnake: 'https://play.google.com/store/apps/details?id=com.BeerStudios.Snake',

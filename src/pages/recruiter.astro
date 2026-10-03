@@ -19,8 +19,8 @@ const sortedQuests = allQuests.sort((a, b) => a.data.order - b.data.order);
     <div class="recruiter-meta">
       <span>{SITE.location}</span> | 
       <span><a href={`mailto:${SITE.email}`}>{SITE.email}</a></span> | 
-      <span><a href={SITE.links.github} target="_blank">GitHub</a></span> | 
-      <span><a href={SITE.links.linkedin} target="_blank">LinkedIn</a></span>
+      <span><a href={SITE.links.github} target="_blank" rel="noopener noreferrer">GitHub</a></span> | 
+      <span><a href={SITE.links.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></span>
     </div>
     
     <p class="recruiter-bio">{SITE.description}</p>
@@ -63,8 +63,8 @@ const sortedQuests = allQuests.sort((a, b) => a.data.order - b.data.order);
         </div>
         <p class="recruiter-project-hook">{project.data.hook}</p>
         <div class="recruiter-project-links">
-          {project.data.links.repo && <a href={project.data.links.repo} target="_blank">Source Code</a>}
-          {project.data.links.playStore && <a href={project.data.links.playStore} target="_blank">Google Play</a>}
+          {project.data.links.repo && <a href={project.data.links.repo} target="_blank" rel="noopener noreferrer">Source Code</a>}
+          {project.data.links.playStore && <a href={project.data.links.playStore} target="_blank" rel="noopener noreferrer">Google Play</a>}
         </div>
       </div>
     ))}
@@ -87,4 +87,8 @@ const sortedQuests = allQuests.sort((a, b) => a.data.order - b.data.order);
       </div>
     ))}
   </div>
+
+  <script is:inline>
+    window.dispatchEvent(new CustomEvent('achievement-unlocked', { detail: { id: 'efficient' } }));
+  </script>
 </RecruiterLayout>

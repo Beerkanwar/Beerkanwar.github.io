@@ -22,6 +22,22 @@ class ModalManager {
       });
     });
 
+    // Native dialog close sync (Escape key or form submission)
+    document.querySelectorAll('dialog.pixel-modal').forEach((d) => {
+      const dialog = d as HTMLDialogElement;
+      dialog.addEventListener('close', () => {
+        if (this.activeModal === dialog) {
+          this.activeModal = null;
+          if (this.previouslyFocused) {
+            this.previouslyFocused.focus();
+          }
+          if ((window as any).SoundManager) {
+            (window as any).SoundManager.play('menuClose');
+          }
+        }
+      });
+    });
+
     // Click outside
     document.querySelectorAll('dialog.pixel-modal').forEach(dialog => {
       dialog.addEventListener('click', ((e: MouseEvent) => {
@@ -38,12 +54,7 @@ class ModalManager {
       }) as EventListener);
     });
 
-    // Handle escape key globally to be safe, though native dialog handles it
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && this.activeModal) {
-        this.closeModal();
-      }
-    });
+    // Handle escape key globally to be safe (though native dialog handles it, we let the native event sync state)
   }
 
   public openModal(id: string) {
@@ -81,11 +92,7 @@ class ModalManager {
     }
     
     modal.close();
-    this.activeModal = null;
-    
-    if (this.previouslyFocused) {
-      this.previouslyFocused.focus();
-    }
+    // State sync is handled by the 'close' event listener added above
   }
 }
 

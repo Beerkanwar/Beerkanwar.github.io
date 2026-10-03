@@ -1,7 +1,8 @@
 import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
 
 const projectsCollection = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
   schema: z.object({
     title: z.string(),
     track: z.enum(['gameplay', 'systems', 'both']),
@@ -73,13 +74,13 @@ const projectsCollection = defineCollection({
           alt: z.string(),
           caption: z.string(),
         })
-      ),
+      ).optional(),
     }),
   }),
 });
 
 const questsCollection = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: "**/*.md", base: "./src/content/quests" }),
   schema: z.object({
     order: z.number(),
     title: z.string(),
@@ -100,7 +101,7 @@ const questsCollection = defineCollection({
 });
 
 const wipCollection = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: "**/*.md", base: "./src/content/wip" }),
   schema: z.object({
     order: z.number(),
     title: z.string(),

@@ -68,24 +68,22 @@ class AchievementManager {
         const emailInput = document.getElementById('contact-email-input') as HTMLInputElement;
         if (emailInput) {
           navigator.clipboard.writeText(emailInput.value).then(() => {
-            this.unlock('connection-established');
+            this.unlock('hello-world');
           });
         }
       });
     }
 
-    // Resume download
-    document.querySelectorAll('.resume-link').forEach(link => {
-      link.addEventListener('click', () => {
-        this.unlock('documentation-read');
-      });
-    });
+
   }
 
   private checkCoinAchievements() {
     const count = this.collectedCoins.size;
-    if (count >= 1) this.unlock('first-blood');
-    if (count >= 7) this.unlock('treasure-hunter');
+    if (count >= 7) {
+      this.unlock('coin-collector');
+      const bonusContainer = document.getElementById('bonus-reveal-container');
+      if (bonusContainer) bonusContainer.hidden = false;
+    }
   }
 
   public unlock(id: string) {
@@ -144,7 +142,7 @@ class AchievementManager {
     }
     
     // HUD XP Bar
-    const xpFill = document.getElementById('hud-xp-fill');
+    const xpFill = document.getElementById('xp-fill');
     if (xpFill) {
       const percentage = (this.unlockedIds.size / this.totalAchievements) * 100;
       xpFill.style.width = `${percentage}%`;

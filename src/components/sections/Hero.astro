@@ -4,7 +4,7 @@ import Icon from '../Icon.astro';
 import Coin from '../Coin.astro';
 ---
 
-<section class="section section-hero" id="top">
+<section class="section section-hero">
   <div class="container container--hero">
     <div class="hero-content">
       <div class="hero-boot-sequence" aria-hidden="true">
@@ -52,3 +52,14 @@ import Coin from '../Coin.astro';
     </div>
   </div>
 </section>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const pressStartBtn = document.getElementById('btn-press-start');
+    if (pressStartBtn) {
+      pressStartBtn.addEventListener('click', () => {
+        window.dispatchEvent(new CustomEvent('achievement-unlocked', { detail: { id: 'press-start' } }));
+      });
+    }
+  });
+</script>

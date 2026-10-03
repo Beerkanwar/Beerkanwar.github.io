@@ -5,8 +5,9 @@ class KeyboardManager {
 
   private bindEvents() {
     document.addEventListener('keydown', (e) => {
-      // Don't trigger shortcuts if typing in input or if disabled
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      // Don't trigger shortcuts if typing in input, select, or if modifier is pressed
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement || e.target instanceof HTMLSelectElement) return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
       
       let state = { keyboardShortcuts: true };
       if ((window as any).AppState) {
@@ -22,6 +23,10 @@ class KeyboardManager {
           break;
         case 'a':
           if (modalManager) modalManager.openModal('modal-achievements');
+          break;
+        case '?':
+          if (modalManager) modalManager.openModal('modal-controls');
+          window.dispatchEvent(new CustomEvent('achievement-unlocked', { detail: { id: 'curious' }}));
           break;
         case 'm':
           // Toggle mute

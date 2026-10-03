@@ -3,7 +3,7 @@ order: 2
 title: "Shipped Commercial Release: Snake on Google Play"
 organization: "Beer Studios"
 location: "Android & PC"
-dateRange: "2025"
+dateRange: "Jan 2025 - Mar 2025"
 stamp: "SHIPPED"
 bullets:
   - "Engineered and shipped a commercial Snake release on the Google Play Store (`com.BeerStudios.Snake`) built around an O(1) `LinkedList<SnakeSegmentData>` + `HashSet<Vector2Int>` movement and collision core."

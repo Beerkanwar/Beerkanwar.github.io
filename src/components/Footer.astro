@@ -21,14 +21,14 @@ const currentYear = new Date().getFullYear();
         <span class="text-muted" style="font-size: 10px;">No Tailwind. No UI frameworks. No bloat.</span>
         
         <div id="bonus-reveal-container" hidden>
-          <a href="/bonus-stage" class="bonus-link" data-astro-reload>Enter Bonus Stage</a>
+          <a href="/bonus-stage/" class="bonus-link" data-astro-reload>Enter Bonus Stage</a>
         </div>
       </div>
 
       <!-- Right: Actions -->
       <div class="footer-right">
         <div>
-          <button type="button" class="footer-action" data-open-modal="modal-controls">
+          <button type="button" class="footer-action" id="btn-footer-controls" data-open-modal="modal-controls">
             <Icon name="key" size={16} /> Keyboard Shortcuts (?)
           </button>
         </div>
@@ -41,3 +41,14 @@ const currentYear = new Date().getFullYear();
     </div>
   </div>
 </footer>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const controlsBtn = document.getElementById('btn-footer-controls');
+    if (controlsBtn) {
+      controlsBtn.addEventListener('click', () => {
+        window.dispatchEvent(new CustomEvent('achievement-unlocked', { detail: { id: 'curious' }}));
+      });
+    }
+  });
+</script>

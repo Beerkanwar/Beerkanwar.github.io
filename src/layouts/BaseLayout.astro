@@ -46,6 +46,10 @@ const canonicalURL = new URL(Astro.url.pathname, SITE.url);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:site_name" content={SITE.studio} />
+    <meta property="og:image" content={new URL('/og/default.png', canonicalURL)} />
+    
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#14172E" />
 
     <!-- Preload fonts -->
     <link rel="preload" href="/fonts/Silkscreen-Regular.ttf" as="font" type="font/ttf" crossorigin />

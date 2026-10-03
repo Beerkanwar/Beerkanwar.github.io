@@ -27,7 +27,7 @@ const hasPoster = fs.existsSync(posterPath);
 ---
 
 <BaseLayout title={`${data.title} | Case File`}>
-  <div class="case-file-wrapper" id="top">
+  <div class="case-file-wrapper">
     <div class="container">
       <div class="case-file-nav">
         <a href="/#levels" class="btn btn-secondary">&larr; Back to Base</a>
@@ -68,15 +68,22 @@ const hasPoster = fs.existsSync(posterPath);
           </div>
           
           <div class="case-actions">
-            {data.links.repo && <a href={data.links.repo} class="btn btn-primary" target="_blank"><Icon name="github" size={16} /> Source Code</a>}
-            {data.links.playStore && <a href={data.links.playStore} class="btn btn-secondary" target="_blank"><Icon name="google-play" size={16} /> Google Play</a>}
-            {data.links.itch && <a href={data.links.itch} class="btn btn-secondary" target="_blank"><Icon name="itch" size={16} /> Play Web Build</a>}
+            {data.links.repo && <a href={data.links.repo} class="btn btn-primary" target="_blank" rel="noopener noreferrer"><Icon name="github" size={16} /> Source Code</a>}
+            {data.links.playStore && <a href={data.links.playStore} class="btn btn-secondary" target="_blank" rel="noopener noreferrer"><Icon name="google-play" size={16} /> Google Play</a>}
+            {data.links.itch && !data.links.itchEmbedUrl && <a href={data.links.itch} class="btn btn-secondary" target="_blank" rel="noopener noreferrer"><Icon name="itch" size={16} /> Play on itch.io</a>}
           </div>
         </header>
 
         <!-- Media Hero -->
         <div class="case-media-hero">
-          {hasPoster ? (
+          {data.links.itchEmbedUrl ? (
+            <div class="embed-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+              <iframe src={data.links.itchEmbedUrl} style="border: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;" allowfullscreen></iframe>
+            </div>
+            <div style="text-align: center; padding: 8px;">
+              <a href={data.links.itch} target="_blank" rel="noopener noreferrer">Play on itch.io</a>
+            </div>
+          ) : hasPoster ? (
             data.media.clipWebm && data.media.clipMp4 ? (
               <video class="case-video-full" autoplay loop muted playsinline poster={data.media.poster}>
                 <source src={data.media.clipWebm} type="video/webm" />
@@ -145,10 +152,27 @@ const hasPoster = fs.existsSync(posterPath);
 
           <section class="case-section">
             <h2>Implementation Details</h2>
+            
+            {data.media.architectureSvgId && (
+              <div style="margin-bottom: 2rem;">
+                <!-- Usually we'd inline the SVG here, but a placeholder or image works -->
+                <div style="background: var(--bg-deep); padding: 1rem; border: 1px solid var(--border); text-align: center; color: var(--muted);">
+                  [Architecture Diagram: {data.media.architectureSvgId}]
+                </div>
+              </div>
+            )}
+            
             <div class="prose">
               <Content />
             </div>
           </section>
+
+          {data.controlsText && (
+            <section class="case-section">
+              <h2>Controls</h2>
+              <p>{data.controlsText}</p>
+            </section>
+          )}
 
           {data.media.gallery && data.media.gallery.length > 0 && (
             <section class="case-section">
@@ -165,6 +189,15 @@ const hasPoster = fs.existsSync(posterPath);
               </ul>
             </section>
           )}
+
+          {data.relatedProject && (
+            <section class="case-section related-project-section">
+              <h2>Related Project</h2>
+              <a href={`/projects/${data.relatedProject.slug.replace(/\.md$/, '')}`} class="btn btn-secondary">
+                View {data.relatedProject.title}
+              </a>
+            </section>
+          )}
         </div>
       </article>
       
@@ -173,4 +206,32 @@ const hasPoster = fs.existsSync(posterPath);
       </div>
     </div>
   </div>
+
+  <script is:inline>
+    (function() {
+      const id = window.location.pathname.split('/').filter(Boolean).pop();
+      if (!id) return;
+      let viewed = [];
+      try {
+        viewed = JSON.parse(localStorage.getItem('beerstudios_viewed_projects') || '[]');
+      } catch(e) {}
+      
+      let isNew = false;
+      if (!viewed.includes(id)) {
+        viewed.push(id);
+        localStorage.setItem('beerstudios_viewed_projects', JSON.stringify(viewed));
+        isNew = true;
+      }
+      
+      // Fire level-up if this is the first one
+      if (viewed.length === 1 && isNew) {
+        window.dispatchEvent(new CustomEvent('achievement-unlocked', { detail: { id: 'level-up' } }));
+      }
+      
+      // Fire completionist if all 12 are viewed
+      if (viewed.length >= 12 && isNew) {
+        window.dispatchEvent(new CustomEvent('achievement-unlocked', { detail: { id: 'completionist' } }));
+      }
+    })();
+  </script>
 </BaseLayout>

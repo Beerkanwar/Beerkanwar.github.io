@@ -3,7 +3,7 @@ order: 3
 title: "GMTK Game Jam Entry: Bomb Massacre"
 organization: "GMTK Game Jam"
 location: "itch.io WebGL & Windows"
-dateRange: "2025"
+dateRange: "Aug 2024"
 stamp: "JAM SHIPPED"
 bullets:
   - "Extended Unity 6's 2D Platformer Microgame template under jam deadline pressure with an original \"cook-to-throw\" bomb mechanic (discrete 1–3 unit blast scaling over a 5s hold timer, backed by a fixed pool of 3 bombs)."
