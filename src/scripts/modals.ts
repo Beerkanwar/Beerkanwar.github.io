@@ -1,47 +1,78 @@
 class ModalManager {
-  private activeModal: HTMLDialogElement | null = null;
+  private menu: HTMLDialogElement | null = null;
   private previouslyFocused: HTMLElement | null = null;
+  private tabs: HTMLElement[] = [];
+  private panels: HTMLElement[] = [];
+  
+  private tabMapping: Record<string, string> = {
+    'modal-class': 'player',
+    'modal-achievements': 'trophies',
+    'modal-settings': 'settings',
+    'modal-controls': 'controls'
+  };
 
   constructor() {
     this.bindEvents();
+    
+    // Bind dynamically if Astro View Transitions happen
+    document.addEventListener('astro:page-load', () => {
+      this.menu = document.getElementById('system-menu') as HTMLDialogElement;
+      this.rebindDOM();
+    });
+  }
+
+  private rebindDOM() {
+    if (!this.menu) return;
+    this.tabs = Array.from(this.menu.querySelectorAll('.system-tab-btn'));
+    this.panels = Array.from(this.menu.querySelectorAll('.system-tab-panel'));
+    
+    this.tabs.forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        const targetTab = (e.currentTarget as HTMLElement).dataset.tab;
+        if (targetTab) this.switchTab(targetTab);
+      });
+    });
+
+    // Keyboard navigation for tabs
+    this.menu.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        const currentIndex = this.tabs.findIndex(t => t.getAttribute('aria-selected') === 'true');
+        if (currentIndex === -1) return;
+        
+        let newIndex = currentIndex;
+        if (e.key === 'ArrowLeft') newIndex = (currentIndex - 1 + this.tabs.length) % this.tabs.length;
+        if (e.key === 'ArrowRight') newIndex = (currentIndex + 1) % this.tabs.length;
+        
+        this.switchTab(this.tabs[newIndex].dataset.tab as string);
+        this.tabs[newIndex].focus();
+      }
+    });
   }
 
   private bindEvents() {
     // Open triggers
-    document.querySelectorAll('[data-open-modal]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const modalId = (e.currentTarget as HTMLElement).dataset.openModal;
-        if (modalId) this.openModal(modalId);
-      });
-    });
-
-    // Close triggers
-    document.querySelectorAll('[data-close-modal]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        this.closeModal();
-      });
-    });
-
-    // Native dialog close sync (Escape key or form submission)
-    document.querySelectorAll('dialog.pixel-modal').forEach((d) => {
-      const dialog = d as HTMLDialogElement;
-      dialog.addEventListener('close', () => {
-        if (this.activeModal === dialog) {
-          this.activeModal = null;
-          if (this.previouslyFocused) {
-            this.previouslyFocused.focus();
-          }
-          if ((window as any).SoundManager) {
-            (window as any).SoundManager.play('menuClose');
-          }
+    document.body.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      const btn = target.closest('[data-open-modal]') as HTMLElement;
+      if (btn) {
+        const modalId = btn.dataset.openModal;
+        if (modalId && this.tabMapping[modalId]) {
+          this.openMenu(this.tabMapping[modalId]);
         }
-      });
+      }
+      
+      const closeBtn = target.closest('[data-close-menu]');
+      if (closeBtn) {
+        this.closeMenu();
+      }
     });
 
-    // Click outside
-    document.querySelectorAll('dialog.pixel-modal').forEach(dialog => {
-      dialog.addEventListener('click', ((e: MouseEvent) => {
-        const rect = dialog.getBoundingClientRect();
+    document.addEventListener('click', ((e: MouseEvent) => {
+      if (!this.menu || !this.menu.open) return;
+      const target = e.target as HTMLElement;
+      // Close on backdrop click
+      if (target === this.menu) {
+        const rect = this.menu.getBoundingClientRect();
         const isInDialog = (
           rect.top <= e.clientY &&
           e.clientY <= rect.top + rect.height &&
@@ -49,50 +80,84 @@ class ModalManager {
           e.clientX <= rect.left + rect.width
         );
         if (!isInDialog) {
-          this.closeModal();
+          this.closeMenu();
         }
-      }) as EventListener);
-    });
+      }
+    }) as EventListener);
 
-    // Handle escape key globally to be safe (though native dialog handles it, we let the native event sync state)
+    // Initial bind
+    window.addEventListener('DOMContentLoaded', () => {
+      this.menu = document.getElementById('system-menu') as HTMLDialogElement;
+      this.rebindDOM();
+      
+      if (this.menu) {
+        this.menu.addEventListener('close', () => {
+          if (this.previouslyFocused) {
+            this.previouslyFocused.focus();
+          }
+          if ((window as any).SoundManager) {
+            (window as any).SoundManager.play('menuClose');
+          }
+        });
+      }
+    });
   }
 
-  public openModal(id: string) {
-    const modal = document.getElementById(id) as HTMLDialogElement;
-    if (!modal) return;
-    
-    // Close existing
-    if (this.activeModal) {
-      this.closeModal();
-    }
+  public openMenu(tabId: string) {
+    if (!this.menu) this.menu = document.getElementById('system-menu') as HTMLDialogElement;
+    if (!this.menu) return;
     
     this.previouslyFocused = document.activeElement as HTMLElement;
-    this.activeModal = modal;
     
-    // Play sound if SoundManager exists
-    if ((window as any).SoundManager) {
-      (window as any).SoundManager.play('menuOpen');
+    this.switchTab(tabId);
+    
+    if (!this.menu.open) {
+      if ((window as any).SoundManager) {
+        (window as any).SoundManager.play('menuOpen');
+      }
+      this.menu.showModal();
     }
-
-    modal.showModal();
-    
-    // Accessibility: focus first focusable element
-    const focusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])') as HTMLElement;
-    if (focusable) focusable.focus();
+  }
+  
+  public openModal(oldId: string) {
+    // Legacy support for keyboard.ts
+    if (this.tabMapping[oldId]) {
+      this.openMenu(this.tabMapping[oldId]);
+    }
   }
 
-  public closeModal() {
-    if (!this.activeModal) return;
-    
-    const modal = this.activeModal;
-    
-    // Play sound
-    if ((window as any).SoundManager) {
-      (window as any).SoundManager.play('menuClose');
+  public closeMenu() {
+    if (this.menu && this.menu.open) {
+      this.menu.close(); // native close will trigger the 'close' event and sound
     }
+  }
+
+  private switchTab(tabId: string) {
+    if (!this.tabs.length) this.rebindDOM();
     
-    modal.close();
-    // State sync is handled by the 'close' event listener added above
+    this.tabs.forEach(tab => {
+      const isSelected = tab.dataset.tab === tabId;
+      tab.setAttribute('aria-selected', isSelected.toString());
+      tab.classList.toggle('is-active', isSelected);
+      
+      // Update title text
+      if (isSelected) {
+        const titleEl = document.getElementById('system-menu-title');
+        if (titleEl) titleEl.textContent = tab.querySelector('.tab-label')?.textContent || '';
+      }
+    });
+    
+    this.panels.forEach(panel => {
+      const isActive = panel.id === `tab-${tabId}`;
+      if (isActive) {
+        panel.hidden = false;
+        // accessibility
+        const focusable = panel.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])') as HTMLElement;
+        if (focusable) focusable.focus();
+      } else {
+        panel.hidden = true;
+      }
+    });
   }
 }
 

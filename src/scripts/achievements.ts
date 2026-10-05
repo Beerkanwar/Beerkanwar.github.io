@@ -168,6 +168,11 @@ class AchievementManager {
       const percentage = (this.unlockedIds.size / this.totalAchievements) * 100;
       xpFill.style.width = `${percentage}%`;
     }
+    const menuXpFill = document.getElementById('menu-xp-fill');
+    if (menuXpFill) {
+      const percentage = (this.unlockedIds.size / this.totalAchievements) * 100;
+      menuXpFill.style.width = `${percentage}%`;
+    }
 
     // Modal Count
     const modalCount = document.getElementById('achievement-count-display');

@@ -1,0 +1,360 @@
+/* === System Menu === */
+.system-menu {
+  position: fixed;
+  z-index: 200;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  color: var(--text);
+}
+
+.system-menu::backdrop {
+  background: rgba(10, 12, 24, 0.75);
+}
+
+.system-menu-inner {
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border-left: 2px solid var(--border);
+  box-shadow: -8px 0 0 var(--shadow-pixel);
+  width: 100%;
+  height: 100%;
+}
+
+.system-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 2px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--panel);
+  z-index: 10;
+}
+
+.system-menu-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.btn-close-menu {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 2px solid transparent;
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.btn-close-menu:hover {
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.system-menu-body {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 20px;
+}
+
+.system-menu-body::-webkit-scrollbar {
+  width: 8px;
+}
+.system-menu-body::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+  border-left: 1px solid var(--border);
+}
+.system-menu-body::-webkit-scrollbar-thumb {
+  background: var(--accent-cyan);
+}
+
+/* Tabs */
+.system-menu-tabs {
+  display: flex;
+  border-top: 2px solid var(--border);
+  background: var(--bg-deep);
+}
+
+.system-tab-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 4px;
+  background: transparent;
+  border: none;
+  border-right: 2px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all var(--dur-fast) ease;
+}
+
+.system-tab-btn:last-child {
+  border-right: none;
+}
+
+.system-tab-btn:hover {
+  background: var(--panel-raised);
+  color: var(--text);
+}
+
+.system-tab-btn.is-active {
+  background: var(--panel);
+  color: var(--accent-yellow);
+  box-shadow: inset 0 4px 0 var(--accent-yellow);
+}
+
+.tab-label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.system-menu-footer {
+  padding: 12px 20px;
+  border-top: 2px solid var(--border);
+  background: var(--panel-raised);
+  font-family: var(--font-display);
+  font-size: var(--fs-chip);
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Trophies Tab */
+.trophies-summary {
+  margin-bottom: 24px;
+}
+.trophy-count {
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+}
+.trophies-xp-bar {
+  height: 8px;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+}
+.achievements-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+/* Settings Tab */
+.settings-group {
+  margin-bottom: 24px;
+}
+.settings-heading {
+  font-family: var(--font-display);
+  font-size: var(--fs-chip);
+  color: var(--muted);
+  margin-bottom: 12px;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 4px;
+}
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.settings-label {
+  font-size: var(--fs-body);
+}
+
+/* Segmented Control */
+.segmented-control {
+  display: flex;
+  border: 2px solid var(--border);
+}
+.segment-btn {
+  padding: 6px 12px;
+  background: var(--panel);
+  border: none;
+  border-right: 2px solid var(--border);
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-size: var(--fs-chip);
+  cursor: pointer;
+}
+.segment-btn:last-child {
+  border-right: none;
+}
+.segment-btn[aria-pressed="true"] {
+  background: var(--accent-cyan);
+  color: var(--bg-deep);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.toggle-track {
+  display: block;
+  width: 48px;
+  height: 24px;
+  background: var(--bg-deep);
+  border: 2px solid var(--border);
+  position: relative;
+}
+.toggle-thumb {
+  display: block;
+  width: 16px;
+  height: 16px;
+  background: var(--muted);
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.15s ease;
+}
+.toggle-switch[aria-pressed="true"] .toggle-track {
+  background: var(--panel-raised);
+}
+.toggle-switch[aria-pressed="true"] .toggle-thumb {
+  background: var(--accent-cyan);
+  transform: translateX(24px);
+}
+
+/* Custom Slider */
+.custom-slider {
+  -webkit-appearance: none;
+  width: 120px;
+  height: 8px;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  outline: none;
+}
+.custom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--accent-yellow);
+  cursor: pointer;
+}
+.custom-slider:disabled::-webkit-slider-thumb {
+  background: var(--muted);
+}
+
+/* Controls Tab */
+.controls-group {
+  margin-bottom: 24px;
+}
+.controls-heading {
+  font-family: var(--font-display);
+  font-size: var(--fs-chip);
+  color: var(--muted);
+  margin-bottom: 12px;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 4px;
+}
+.control-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.control-desc {
+  font-size: var(--fs-body);
+}
+.control-keys kbd {
+  background: var(--panel-raised);
+  border: 2px solid var(--border);
+  border-bottom-width: 4px;
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-chip);
+  border-radius: 2px;
+  margin-left: 4px;
+}
+.konami-keys {
+  font-family: var(--font-mono);
+}
+
+/* Class override from components.css for the system menu */
+.class-selected-badge {
+  display: none;
+  font-family: var(--font-display);
+  font-size: var(--fs-chip);
+  color: var(--accent-yellow);
+  margin-left: auto;
+}
+.class-option.is-selected .class-selected-badge {
+  display: block;
+}
+
+/* Media Queries */
+@media (min-width: 768px) {
+  .system-menu {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 440px;
+    height: 100%;
+  }
+  
+  html[data-motion="full"] .system-menu[open] {
+    animation: slideInRight 0.2s steps(6) forwards;
+  }
+  @keyframes slideInRight {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(0); }
+  }
+  .achievements-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .system-menu {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .system-menu-inner {
+    border-left: none;
+    border-top: 2px solid var(--border);
+    box-shadow: 0 -8px 0 var(--shadow-pixel);
+  }
+
+  .system-menu-body {
+    padding: 16px;
+  }
+  
+  .hide-on-mobile {
+    display: none;
+  }
+  
+  .system-menu-footer {
+    display: none;
+  }
+
+  html[data-motion="full"] .system-menu[open] {
+    animation: slideUp 0.2s steps(6) forwards;
+  }
+  @keyframes slideUp {
+    0% { transform: translateY(100%); }
+    100% { transform: translateY(0); }
+  }
+}

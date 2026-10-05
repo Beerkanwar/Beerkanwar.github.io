@@ -1,0 +1,213 @@
+---
+import Icon from '../Icon.astro';
+import { ACHIEVEMENTS } from '../../data/achievements';
+---
+
+<dialog id="system-menu" class="system-menu">
+  <div class="system-menu-inner">
+    <div class="system-menu-header">
+      <h2 id="system-menu-title" class="system-menu-title">Player</h2>
+      <button type="button" class="btn-close-menu" data-close-menu aria-label="Close menu">&times;</button>
+    </div>
+
+    <div class="system-menu-body" id="system-menu-body">
+      
+      <!-- PLAYER TAB -->
+      <div class="system-tab-panel" id="tab-player" role="tabpanel" aria-labelledby="tab-btn-player">
+        <p class="tab-desc">Your class determines which skills and projects are highlighted.</p>
+        
+        <div class="class-options" role="radiogroup" aria-labelledby="class-group-label">
+          <label class="class-option class-option--all is-selected">
+            <input type="radio" name="playerClass" value="all" checked class="sr-only" />
+            <div class="class-option-icon"><Icon name="star" size={24} /></div>
+            <div class="class-option-text">
+              <span class="class-option-title">Explore All (Default)</span>
+              <span class="class-option-desc">Shows all projects in chronological order.</span>
+            </div>
+            <div class="class-selected-badge">SELECTED</div>
+          </label>
+
+          <label class="class-option class-option--gameplay">
+            <input type="radio" name="playerClass" value="gameplay" class="sr-only" />
+            <div class="class-option-icon" style="color: var(--track-gameplay);"><Icon name="controller" size={24} /></div>
+            <div class="class-option-text">
+              <span class="class-option-title">Gameplay Engineer</span>
+              <span class="class-option-desc">Prioritizes Unity, C#, physics, and game loops.</span>
+            </div>
+            <div class="class-selected-badge">SELECTED</div>
+          </label>
+
+          <label class="class-option class-option--systems">
+            <input type="radio" name="playerClass" value="systems" class="sr-only" />
+            <div class="class-option-icon" style="color: var(--track-systems);"><Icon name="gear" size={24} /></div>
+            <div class="class-option-text">
+              <span class="class-option-title">Systems / Backend</span>
+              <span class="class-option-desc">Prioritizes architecture, APIs, netcode, ML.</span>
+            </div>
+            <div class="class-selected-badge">SELECTED</div>
+          </label>
+        </div>
+
+        <button type="button" class="btn btn-primary btn-apply-class" id="btn-apply-class">Apply & View Projects</button>
+      </div>
+
+      <!-- TROPHIES TAB -->
+      <div class="system-tab-panel" id="tab-trophies" role="tabpanel" aria-labelledby="tab-btn-trophies" hidden>
+        <div class="trophies-summary">
+          <span class="trophy-count"><span id="achievement-count-display">0</span> / 11 Unlocked</span>
+          <div class="xp-bar trophies-xp-bar">
+            <div class="xp-bar-fill" id="menu-xp-fill"></div>
+          </div>
+        </div>
+
+        <div id="achievements-list" class="achievements-grid">
+          {ACHIEVEMENTS.map(ach => (
+            <div class="achievement-card is-locked" data-achievement-id={ach.id}>
+              <div class="achievement-icon">
+                <Icon name={ach.icon} size={24} />
+              </div>
+              <div class="achievement-info">
+                <div class="achievement-title">{ach.title}</div>
+                <div class="achievement-desc">{ach.description}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- SETTINGS TAB -->
+      <div class="system-tab-panel" id="tab-settings" role="tabpanel" aria-labelledby="tab-btn-settings" hidden>
+        <div class="settings-group">
+          <h3 class="settings-heading">DISPLAY</h3>
+          <div class="settings-row">
+            <span class="settings-label">Theme</span>
+            <div class="segmented-control" role="radiogroup">
+              <button class="segment-btn" data-theme-btn="system" aria-pressed="true">Sys</button>
+              <button class="segment-btn" data-theme-btn="night" aria-pressed="false">Night</button>
+              <button class="segment-btn" data-theme-btn="day" aria-pressed="false">Day</button>
+            </div>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Motion</span>
+            <div class="segmented-control" role="radiogroup">
+              <button class="segment-btn" data-motion-btn="system" aria-pressed="true">Sys</button>
+              <button class="segment-btn" data-motion-btn="full" aria-pressed="false">Full</button>
+              <button class="segment-btn" data-motion-btn="reduced" aria-pressed="false">Reduced</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <h3 class="settings-heading">AUDIO</h3>
+          <div class="settings-row">
+            <span class="settings-label">Sound Effects</span>
+            <button type="button" class="toggle-switch" id="btn-toggle-sound" aria-pressed="false">
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </button>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Volume</span>
+            <input type="range" id="volume-slider" class="volume-slider custom-slider" min="0" max="1" step="0.1" value="0.5" disabled />
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <h3 class="settings-heading">GAMEPLAY</h3>
+          <div class="settings-row">
+            <span class="settings-label">Keyboard Shortcuts</span>
+            <button type="button" class="toggle-switch is-on" id="btn-toggle-keyboard" aria-pressed="true">
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </button>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Show Hidden Coins</span>
+            <button type="button" class="toggle-switch" id="btn-toggle-coins" aria-pressed="false">
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </button>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Arcade Mode (CRT)</span>
+            <button type="button" class="toggle-switch" id="btn-toggle-arcade" aria-pressed="false">
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </button>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-reset-progress" id="btn-reset-progress">Reset Progress</button>
+      </div>
+
+      <!-- CONTROLS TAB -->
+      <div class="system-tab-panel" id="tab-controls" role="tabpanel" aria-labelledby="tab-btn-controls" hidden>
+        <div class="controls-group">
+          <h3 class="controls-heading">NAVIGATION</h3>
+          <div class="control-row">
+            <span class="control-desc">Go to sections</span>
+            <div class="control-keys"><kbd>1</kbd> - <kbd>4</kbd></div>
+          </div>
+        </div>
+
+        <div class="controls-group">
+          <h3 class="controls-heading">MENUS</h3>
+          <div class="control-row">
+            <span class="control-desc">Open Player</span>
+            <div class="control-keys"><kbd>P</kbd></div>
+          </div>
+          <div class="control-row">
+            <span class="control-desc">Open Trophies</span>
+            <div class="control-keys"><kbd>A</kbd></div>
+          </div>
+          <div class="control-row">
+            <span class="control-desc">Open Settings</span>
+            <div class="control-keys"><kbd>S</kbd></div>
+          </div>
+          <div class="control-row">
+            <span class="control-desc">Open Controls</span>
+            <div class="control-keys"><kbd>?</kbd></div>
+          </div>
+          <div class="control-row">
+            <span class="control-desc">Close Menu</span>
+            <div class="control-keys"><kbd>Esc</kbd></div>
+          </div>
+        </div>
+
+        <div class="controls-group">
+          <h3 class="controls-heading">SHORTCUTS</h3>
+          <div class="control-row">
+            <span class="control-desc">Toggle Audio</span>
+            <div class="control-keys"><kbd>M</kbd></div>
+          </div>
+          <div class="control-row">
+            <span class="control-desc">Konami Code</span>
+            <div class="control-keys konami-keys">&uarr; &uarr; &darr; &darr; &larr; &rarr; &larr; &rarr; B A</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TABS -->
+    <div class="system-menu-tabs" role="tablist">
+      <button class="system-tab-btn is-active" id="tab-btn-player" role="tab" aria-selected="true" aria-controls="tab-player" data-tab="player">
+        <Icon name="star" size={24} />
+        <span class="tab-label">Player</span>
+      </button>
+      <button class="system-tab-btn" id="tab-btn-trophies" role="tab" aria-selected="false" aria-controls="tab-trophies" data-tab="trophies">
+        <Icon name="trophy" size={24} />
+        <span class="tab-label">Trophies</span>
+      </button>
+      <button class="system-tab-btn" id="tab-btn-settings" role="tab" aria-selected="false" aria-controls="tab-settings" data-tab="settings">
+        <Icon name="gear" size={24} />
+        <span class="tab-label">Settings</span>
+      </button>
+      <button class="system-tab-btn" id="tab-btn-controls" role="tab" aria-selected="false" aria-controls="tab-controls" data-tab="controls">
+        <Icon name="controller" size={24} />
+        <span class="tab-label">Controls</span>
+      </button>
+    </div>
+
+    <!-- DESKTOP FOOTER -->
+    <div class="system-menu-footer">
+      ESC to close - Left/Right to switch tabs
+    </div>
+  </div>
+</dialog>

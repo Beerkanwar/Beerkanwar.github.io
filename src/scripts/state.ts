@@ -53,18 +53,18 @@ class StateManager {
   }
 
   private bindEvents() {
-    // Theme Radios
-    document.querySelectorAll<HTMLInputElement>('input[name="theme"]').forEach(radio => {
-      radio.addEventListener('change', (e) => {
-        this.state.theme = (e.target as HTMLInputElement).value as Theme;
+    // Theme Segmented Control
+    document.querySelectorAll<HTMLButtonElement>('[data-theme-btn]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        this.state.theme = (e.currentTarget as HTMLButtonElement).dataset.themeBtn as Theme;
         this.applyState();
       });
     });
 
-    // Motion Radios
-    document.querySelectorAll<HTMLInputElement>('input[name="motionPref"]').forEach(radio => {
-      radio.addEventListener('change', (e) => {
-        this.state.motion = (e.target as HTMLInputElement).value as Motion;
+    // Motion Segmented Control
+    document.querySelectorAll<HTMLButtonElement>('[data-motion-btn]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        this.state.motion = (e.currentTarget as HTMLButtonElement).dataset.motionBtn as Motion;
         this.applyState();
       });
     });
@@ -86,6 +86,27 @@ class StateManager {
         }
       });
     });
+
+    const applyBtn = document.getElementById('btn-apply-class');
+    if (applyBtn) {
+      applyBtn.addEventListener('click', () => {
+        if ((window as any).ModalManager) {
+          (window as any).ModalManager.closeMenu();
+        }
+        window.location.hash = '#levels';
+      });
+    }
+
+    const resetBtn = document.getElementById('btn-reset-progress');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        if (confirm('Are you sure you want to reset all your progress? This cannot be undone.')) {
+          localStorage.removeItem('beerstudios_save_v1');
+          localStorage.removeItem('beerstudios_achievements_v1');
+          window.location.reload();
+        }
+      });
+    }
 
     // Toggles
     const setupToggle = (id: string, key: keyof AppState, customAction?: (val: boolean) => void) => {
@@ -185,20 +206,23 @@ class StateManager {
     root.dataset.arcade = this.state.arcadeMode.toString();
 
     // Sync UI elements
-    const syncRadio = (name: string, val: string) => {
-      const radio = document.querySelector(`input[name="${name}"][value="${val}"]`) as HTMLInputElement;
-      if (radio) radio.checked = true;
+    const syncSegment = (attr: string, val: string) => {
+      document.querySelectorAll(`[${attr}]`).forEach(btn => {
+        const isMatch = (btn as HTMLElement).getAttribute(attr) === val;
+        btn.setAttribute('aria-pressed', isMatch.toString());
+      });
     };
     
-    syncRadio('theme', this.state.theme);
-    syncRadio('motionPref', this.state.motion);
-    syncRadio('playerClass', this.state.playerClass);
+    syncSegment('data-theme-btn', this.state.theme);
+    syncSegment('data-motion-btn', this.state.motion);
+
+    const radio = document.querySelector(`input[name="playerClass"][value="${this.state.playerClass}"]`) as HTMLInputElement;
+    if (radio) radio.checked = true;
 
     // Sync Toggles
     const syncToggle = (id: string, val: boolean) => {
       const btn = document.getElementById(id);
       if (btn) {
-        btn.textContent = val ? 'ON' : 'OFF';
         btn.setAttribute('aria-pressed', val.toString());
         if (val) btn.classList.add('is-on');
         else btn.classList.remove('is-on');
