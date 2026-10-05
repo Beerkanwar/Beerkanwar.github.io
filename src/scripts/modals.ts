@@ -23,6 +23,10 @@ class ModalManager {
 
   private rebindDOM() {
     if (!this.menu) return;
+    
+    if (this.menu.dataset.bound) return;
+    this.menu.dataset.bound = 'true';
+
     this.tabs = Array.from(this.menu.querySelectorAll('.system-tab-btn'));
     this.panels = Array.from(this.menu.querySelectorAll('.system-tab-panel'));
     
@@ -35,16 +39,32 @@ class ModalManager {
 
     // Keyboard navigation for tabs
     this.menu.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-        const currentIndex = this.tabs.findIndex(t => t.getAttribute('aria-selected') === 'true');
-        if (currentIndex === -1) return;
-        
-        let newIndex = currentIndex;
-        if (e.key === 'ArrowLeft') newIndex = (currentIndex - 1 + this.tabs.length) % this.tabs.length;
-        if (e.key === 'ArrowRight') newIndex = (currentIndex + 1) % this.tabs.length;
-        
-        this.switchTab(this.tabs[newIndex].dataset.tab as string);
-        this.tabs[newIndex].focus();
+      // Find the tablist if event originated from a tab
+      const isTab = (e.target as HTMLElement).classList.contains('system-tab-btn');
+      if (!isTab) return;
+
+      const currentIndex = this.tabs.findIndex(t => t.getAttribute('aria-selected') === 'true');
+      if (currentIndex === -1) return;
+      
+      let newIndex = currentIndex;
+      if (e.key === 'ArrowLeft') newIndex = (currentIndex - 1 + this.tabs.length) % this.tabs.length;
+      else if (e.key === 'ArrowRight') newIndex = (currentIndex + 1) % this.tabs.length;
+      else if (e.key === 'Home') newIndex = 0;
+      else if (e.key === 'End') newIndex = this.tabs.length - 1;
+      else return;
+
+      e.preventDefault();
+      
+      this.switchTab(this.tabs[newIndex].dataset.tab as string);
+      this.tabs[newIndex].focus();
+    });
+    
+    this.menu.addEventListener('close', () => {
+      if (this.previouslyFocused) {
+        this.previouslyFocused.focus();
+      }
+      if ((window as any).SoundManager) {
+        (window as any).SoundManager.play('menuClose');
       }
     });
   }
@@ -70,18 +90,9 @@ class ModalManager {
     document.addEventListener('click', ((e: MouseEvent) => {
       if (!this.menu || !this.menu.open) return;
       const target = e.target as HTMLElement;
-      // Close on backdrop click
+      // Close on backdrop click (the dialog itself)
       if (target === this.menu) {
-        const rect = this.menu.getBoundingClientRect();
-        const isInDialog = (
-          rect.top <= e.clientY &&
-          e.clientY <= rect.top + rect.height &&
-          rect.left <= e.clientX &&
-          e.clientX <= rect.left + rect.width
-        );
-        if (!isInDialog) {
-          this.closeMenu();
-        }
+        this.closeMenu();
       }
     }) as EventListener);
 
@@ -89,17 +100,6 @@ class ModalManager {
     window.addEventListener('DOMContentLoaded', () => {
       this.menu = document.getElementById('system-menu') as HTMLDialogElement;
       this.rebindDOM();
-      
-      if (this.menu) {
-        this.menu.addEventListener('close', () => {
-          if (this.previouslyFocused) {
-            this.previouslyFocused.focus();
-          }
-          if ((window as any).SoundManager) {
-            (window as any).SoundManager.play('menuClose');
-          }
-        });
-      }
     });
   }
 
@@ -109,7 +109,7 @@ class ModalManager {
     
     this.previouslyFocused = document.activeElement as HTMLElement;
     
-    this.switchTab(tabId);
+    this.switchTab(tabId, true); // true = shift focus to panel on open
     
     if (!this.menu.open) {
       if ((window as any).SoundManager) {
@@ -132,13 +132,14 @@ class ModalManager {
     }
   }
 
-  private switchTab(tabId: string) {
+  private switchTab(tabId: string, focusPanel: boolean = false) {
     if (!this.tabs.length) this.rebindDOM();
     
     this.tabs.forEach(tab => {
       const isSelected = tab.dataset.tab === tabId;
       tab.setAttribute('aria-selected', isSelected.toString());
       tab.classList.toggle('is-active', isSelected);
+      tab.tabIndex = isSelected ? 0 : -1;
       
       // Update title text
       if (isSelected) {
@@ -151,9 +152,11 @@ class ModalManager {
       const isActive = panel.id === `tab-${tabId}`;
       if (isActive) {
         panel.hidden = false;
-        // accessibility
-        const focusable = panel.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])') as HTMLElement;
-        if (focusable) focusable.focus();
+        
+        if (focusPanel) {
+          const focusable = panel.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])') as HTMLElement;
+          if (focusable) focusable.focus();
+        }
       } else {
         panel.hidden = true;
       }

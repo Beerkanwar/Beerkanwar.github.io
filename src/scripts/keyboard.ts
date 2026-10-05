@@ -18,14 +18,17 @@ class KeyboardManager {
       const modalManager = (window as any).ModalManager;
       
       switch (e.key.toLowerCase()) {
+        case 'p':
+          if (modalManager) modalManager.openMenu('player');
+          break;
         case 's':
-          if (modalManager) modalManager.openModal('modal-settings');
+          if (modalManager) modalManager.openMenu('settings');
           break;
         case 'a':
-          if (modalManager) modalManager.openModal('modal-achievements');
+          if (modalManager) modalManager.openMenu('trophies');
           break;
         case '?':
-          if (modalManager) modalManager.openModal('modal-controls');
+          if (modalManager) modalManager.openMenu('controls');
           window.dispatchEvent(new CustomEvent('achievement-unlocked', { detail: { id: 'curious' }}));
           break;
         case 'm':
