@@ -137,13 +137,18 @@
 
 /* XP Progress Bar */
 .xp-bar {
+  position: relative;
+  height: 4px;
+  background: var(--bg-deep);
+  overflow: hidden;
+  width: 100%;
+}
+
+.hud .xp-bar {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 4px;
-  background: var(--bg-deep);
-  overflow: hidden;
 }
 
 .xp-bar-fill {
@@ -2418,7 +2423,6 @@
 .scope-col ul { padding-left: 20px; }
 
 /* Utilities */
-.xp-bar { height: 4px; background: var(--bg-deep); width: 100%; }
 .xp-bar-fill { height: 100%; background: var(--accent-cyan); width: 0%; transition: width 0.3s ease; }
 .hud-coins { display: flex; align-items: center; gap: 4px; padding: 4px 12px; background: transparent; border: 2px solid var(--accent-yellow); color: var(--accent-yellow); font-family: var(--font-display); font-size: 11px; cursor: pointer; }
 .contact-input { width: 100%; max-width: 320px; padding: 12px 16px; background: var(--bg-deep); border: 2px solid var(--border); color: var(--text); font-family: var(--font-mono); }

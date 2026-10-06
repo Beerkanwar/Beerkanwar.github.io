@@ -226,6 +226,11 @@ class StateManager {
         btn.setAttribute('aria-pressed', val.toString());
         if (val) btn.classList.add('is-on');
         else btn.classList.remove('is-on');
+        
+        const textSpan = btn.querySelector('.toggle-text');
+        if (textSpan) {
+          textSpan.textContent = val ? 'ON' : 'OFF';
+        }
       }
     };
 

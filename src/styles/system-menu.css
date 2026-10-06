@@ -182,6 +182,7 @@
 }
 
 .trophies-xp-bar {
+  position: relative;
   height: 8px;
   background: var(--bg-deep);
   border: 1px solid var(--border);
