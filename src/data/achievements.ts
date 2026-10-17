@@ -33,7 +33,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   {
     id: 'completionist',
     title: 'Completionist',
-    description: 'Cleared all 12 project Case Files.',
+    description: 'Cleared all 13 project Case Files.',
     icon: 'trophy',
   },
   {

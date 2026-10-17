@@ -65,6 +65,7 @@ export const SKILLS: SkillNode[] = [
       'tic-tac-toe-multiplayer',
       'geometry-survival',
       'bomb-massacre',
+      'roam',
     ],
   },
   {
@@ -177,7 +178,7 @@ export const SKILLS: SkillNode[] = [
     shortCode: 'SEC',
     branch: 'systems',
     pips: 3,
-    projects: ['resource-hub'],
+    projects: ['resource-hub', 'roam'],
   },
   {
     id: 'python-ml',
@@ -193,15 +194,15 @@ export const SKILLS: SkillNode[] = [
     shortCode: 'DKR',
     branch: 'systems',
     pips: 2,
-    projects: ['resource-hub'],
+    projects: ['resource-hub', 'roam'],
   },
   {
     id: 'jest-supertest',
-    name: 'Jest & Supertest Integration Testing',
+    name: 'Testing (Jest/Supertest, xUnit/Testcontainers)',
     shortCode: 'TST',
     branch: 'systems',
     pips: 2,
-    projects: ['resource-hub'],
+    projects: ['resource-hub', 'roam'],
   },
   {
     id: 'react-vite',
@@ -209,7 +210,23 @@ export const SKILLS: SkillNode[] = [
     shortCode: 'RCT',
     branch: 'systems',
     pips: 2,
-    projects: ['resource-hub'],
+    projects: ['resource-hub', 'roam'],
+  },
+  {
+    id: 'signalr-webrtc',
+    name: 'SignalR & WebRTC (Real-Time)',
+    shortCode: 'RTC',
+    branch: 'systems',
+    pips: 2,
+    projects: ['roam', 'tic-tac-toe-multiplayer'],
+  },
+  {
+    id: 'postgresql-postgis',
+    name: 'PostgreSQL & PostGIS (Geospatial)',
+    shortCode: 'PG',
+    branch: 'systems',
+    pips: 2,
+    projects: ['roam'],
   },
 
   // Branch 3: Desktop & Foundations (5 skills)
@@ -270,6 +287,7 @@ export const SKILLS: SkillNode[] = [
       'tic-tac-toe-multiplayer',
       'geometry-survival',
       'bomb-massacre',
+      'roam',
     ],
   },
 ];
