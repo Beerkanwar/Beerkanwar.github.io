@@ -36,6 +36,14 @@ class KeyboardManager {
           const muteBtn = document.getElementById('btn-toggle-sound');
           if (muteBtn) muteBtn.click();
           break;
+        case 'c':
+          const commSection = document.getElementById('commissions');
+          if (commSection) {
+            commSection.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            window.location.hash = '#commissions';
+          }
+          break;
         case '1':
           window.location.hash = '#levels';
           break;

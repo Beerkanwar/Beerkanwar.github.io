@@ -2440,3 +2440,366 @@
   0% { transform: translate(-50%, 0); opacity: 1; }
   100% { transform: translate(-50%, -20px); opacity: 0; }
 }
+
+/* === Recruiter Contract Banner === */
+.contract-banner {
+  background: var(--panel-raised);
+  border: 1px solid var(--border-strong);
+  border-left: 4px solid var(--accent-yellow);
+  padding: 18px 22px;
+  margin-block: 24px 32px;
+}
+
+.contract-banner h2 {
+  font-family: var(--font-sans);
+  font-size: 1.15rem;
+  font-weight: 700;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.contract-banner p {
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-body-sm);
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.contract-banner ul {
+  margin: 10px 0 14px 20px;
+  padding: 0;
+}
+
+.contract-banner li {
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-body-sm);
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.contract-banner a {
+  color: var(--accent-cyan);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.contract-banner a:hover {
+  color: var(--accent-yellow);
+}
+
+/* === Guild Commission Board === */
+.section-commissions {
+  position: relative;
+  background: var(--bg);
+  padding-block: var(--sp-12, 48px);
+}
+
+.commissions-header {
+  margin-bottom: 28px;
+}
+
+.commissions-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--bg-deep);
+  border: 1px solid var(--accent-yellow);
+  color: var(--accent-yellow);
+  margin-bottom: 12px;
+}
+
+.commissions-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-yellow);
+  box-shadow: 0 0 8px var(--accent-yellow);
+  animation: pulse 2s infinite ease-in-out;
+}
+
+.commissions-meta-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: var(--fs-chip);
+  color: var(--muted);
+}
+
+.commissions-meta-strip strong {
+  color: var(--text);
+}
+
+.commissions-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .commissions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.commission-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border: 2px solid var(--border);
+  box-shadow: 4px 4px 0 var(--shadow-pixel);
+  padding: 24px;
+  position: relative;
+  transition: transform var(--dur-fast) ease,
+              box-shadow var(--dur-fast) ease,
+              border-color var(--dur-fast) ease,
+              opacity var(--dur-fast) ease;
+}
+
+.commission-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--shadow-pixel);
+  border-color: var(--border-strong);
+}
+
+.commission-card.is-highlighted {
+  border-color: var(--accent-yellow);
+  box-shadow: 0 0 0 2px var(--accent-yellow), 6px 6px 0 var(--shadow-pixel);
+}
+
+.commission-card[data-track="gameplay"].is-highlighted {
+  border-color: var(--track-gameplay);
+  box-shadow: 0 0 0 2px var(--track-gameplay), 6px 6px 0 var(--shadow-pixel);
+}
+
+.commission-card[data-track="systems"].is-highlighted {
+  border-color: var(--track-systems);
+  box-shadow: 0 0 0 2px var(--track-systems), 6px 6px 0 var(--shadow-pixel);
+}
+
+.commission-card.is-dimmed {
+  opacity: 0.5;
+}
+
+.commission-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.commission-code {
+  font-family: var(--font-display);
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.commission-track-tag {
+  font-family: var(--font-display);
+  font-size: 10px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.05em;
+}
+
+.commission-card[data-track="gameplay"] .commission-track-tag {
+  background: rgba(179, 136, 255, 0.15);
+  color: var(--track-gameplay);
+  border: 1px solid var(--track-gameplay);
+}
+
+.commission-card[data-track="systems"] .commission-track-tag {
+  background: rgba(110, 231, 160, 0.15);
+  color: var(--track-systems);
+  border: 1px solid var(--track-systems);
+}
+
+.commission-card-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1.35;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.commission-card-tagline {
+  font-family: var(--font-mono);
+  font-size: var(--fs-chip);
+  color: var(--accent-cyan);
+  margin-bottom: 12px;
+}
+
+.commission-card-hook {
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-body-sm);
+  color: var(--text);
+  margin-bottom: 16px;
+  font-style: italic;
+  padding-left: 10px;
+  border-left: 2px solid var(--border-strong);
+}
+
+.commission-deliverables-title {
+  font-family: var(--font-display);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.commission-deliverables-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.commission-deliverables-list li {
+  font-size: var(--fs-body-sm);
+  line-height: 1.45;
+  color: var(--text);
+  position: relative;
+  padding-left: 18px;
+}
+
+.commission-deliverables-list li::before {
+  content: "▶";
+  position: absolute;
+  left: 0;
+  top: 1px;
+  font-size: 9px;
+  color: var(--accent-yellow);
+}
+
+.commission-proof-section {
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  padding: 12px 14px;
+  margin-bottom: 20px;
+  margin-top: auto;
+}
+
+.commission-proof-title {
+  font-family: var(--font-display);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.commission-proof-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.commission-proof-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: var(--fs-chip);
+  font-family: var(--font-mono);
+  color: var(--text);
+  text-decoration: none;
+  padding: 5px 10px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  transition: all var(--dur-fast) ease;
+}
+
+.commission-proof-link:hover {
+  border-color: var(--accent-yellow);
+  color: var(--accent-yellow);
+  transform: translateX(2px);
+}
+
+.commission-proof-file {
+  color: var(--accent-cyan);
+  font-size: 11px;
+}
+
+.commission-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.commission-estimate {
+  font-family: var(--font-mono);
+  font-size: var(--fs-chip);
+  color: var(--muted);
+}
+
+.commission-card-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Board Footer Callout */
+.commissions-board-footer {
+  margin-top: 32px;
+  padding: 24px;
+  background: var(--panel);
+  border: 2px solid var(--border);
+  box-shadow: 4px 4px 0 var(--shadow-pixel);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .commissions-board-footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.commissions-board-footer-content h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--accent-yellow);
+  margin-bottom: 6px;
+}
+
+.commissions-board-footer-content p {
+  font-size: var(--fs-body-sm);
+  color: var(--muted);
+  max-width: 55ch;
+  margin: 0;
+}
+
+.commissions-board-footer-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}

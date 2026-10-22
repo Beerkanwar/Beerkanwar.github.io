@@ -263,6 +263,11 @@ class StateManager {
       this.filterGridByClass();
     }
 
+    // Notify commission board and other components of class change
+    window.dispatchEvent(new CustomEvent('player-class-changed', { 
+      detail: { playerClass: this.state.playerClass } 
+    }));
+
     this.saveState();
   }
   

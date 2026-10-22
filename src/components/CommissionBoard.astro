@@ -1,0 +1,352 @@
+---
+import Icon from './Icon.astro';
+import { SITE } from '../data/site';
+
+interface CommissionCard {
+  id: string;
+  code: string;
+  track: 'gameplay' | 'systems';
+  title: string;
+  tagline: string;
+  hook: string;
+  deliverables: string[];
+  proofLinks: {
+    label: string;
+    sublabel: string;
+    href: string;
+  }[];
+  estimate: string;
+  inquirySubject: string;
+}
+
+const COMMISSIONS: CommissionCard[] = [
+  {
+    id: 'comm-gameplay-input',
+    code: 'BOUNTY #01',
+    track: 'gameplay',
+    title: 'Modular Gameplay & Input Systems',
+    tagline: 'Architecture · Interaction · Controls',
+    hook: 'Decoupled C# event architectures, polymorphic interaction systems, and runtime-rebindable Keyboard/Gamepad/Touch controls.',
+    deliverables: [
+      'Polymorphic interaction station hierarchies (eliminating central type-switches)',
+      'Unity New Input System wrapper with runtime JSON rebinding (Keyboard + Gamepad)',
+      'Decoupled static C# event busses with leak-free teardown (ResetStaticDataManager)',
+      'Mobile touch-swipe detection with dominant-axis flattening & input buffering'
+    ],
+    proofLinks: [
+      {
+        label: 'Kitchen Chaos',
+        sublabel: 'BaseCounter.cs, GameInput.cs',
+        href: '/projects/kitchen-chaos'
+      },
+      {
+        label: 'Snake',
+        sublabel: 'InputReader.cs',
+        href: '/projects/snake'
+      }
+    ],
+    estimate: '$50 – $300 · 1–2 days delivery',
+    inquirySubject: 'Commission Inquiry: Modular Gameplay & Input Systems'
+  },
+  {
+    id: 'comm-physics-math',
+    code: 'BOUNTY #02',
+    track: 'gameplay',
+    title: 'Custom Physics, Vector Math & 2D/3D Mechanics',
+    tagline: 'Kinematics · Destructibles · Geometry',
+    hook: 'Custom raycast/capsule-cast controllers, destructible Tilemap systems, and jitter-free turret/vision math.',
+    deliverables: [
+      'CapsuleCast axis-sliding movement controllers (resolving diagonal wall snagging)',
+      'Destructible Tilemap grid algorithms with radial blast falloff & coordinate transforms',
+      'Jitter-free 2D/3D field-of-view, line-of-sight raycasts & turret tracking math',
+      'Dynamic orthographic aspect-ratio camera framing for arbitrary mobile displays'
+    ],
+    proofLinks: [
+      {
+        label: 'Bomb Massacre',
+        sublabel: 'DestroyTilesInRadius',
+        href: '/projects/bomb-massacre'
+      },
+      {
+        label: 'Maths & Physics Playground',
+        sublabel: 'TurretLogic.cs, EnemyVision.cs',
+        href: '/projects/maths-physics-playground'
+      }
+    ],
+    estimate: '$75 – $350 · 2–3 days delivery',
+    inquirySubject: 'Commission Inquiry: Custom Physics, Vector Math & Mechanics'
+  },
+  {
+    id: 'comm-multiplayer-ai',
+    code: 'BOUNTY #03',
+    track: 'systems',
+    title: 'Server-Authoritative Multiplayer (NGO) & Game AI',
+    tagline: 'Netcode · Replication · Machine Learning',
+    hook: 'Cheat-resistant RPC move validation, NetworkVariable state sync, and Unity ML-Agents (PPO) training pipelines.',
+    deliverables: [
+      'Server-authoritative RPC validation & NetworkVariable state synchronization',
+      'Unity Netcode for GameObjects (NGO) match loops, turn orchestration & disconnect safety',
+      'Unity ML-Agents (PPO) reinforcement learning gym setup, observation sensors & reward shaping',
+      'Autonomous bot heuristics & anti-desynchronization reconciliation'
+    ],
+    proofLinks: [
+      {
+        label: 'Tic-Tac-Toe Multiplayer',
+        sublabel: 'GameManager.cs (NGO RPCs)',
+        href: '/projects/tic-tac-toe-multiplayer'
+      },
+      {
+        label: 'FlappyBirdRL',
+        sublabel: 'BirdAgent.cs (PPO Gym)',
+        href: '/projects/flappy-bird-rl'
+      }
+    ],
+    estimate: '$150 – $500 · 3–5 days delivery',
+    inquirySubject: 'Commission Inquiry: Server-Authoritative Multiplayer & Game AI'
+  },
+  {
+    id: 'comm-performance-fixes',
+    code: 'BOUNTY #04',
+    track: 'systems',
+    title: 'Performance Profiling, Memory Leak Fixes & HTML5 Ports',
+    tagline: 'Optimization · Low-GC · WebGL/Phaser',
+    hook: 'O(1) data structure optimization, object pooling, MaterialPropertyBlock batching, cross-scene static delegate cleanup, and Phaser web games.',
+    deliverables: [
+      'Static event memory-leak elimination & cross-scene delegate cleanup audits',
+      'Zero-allocation custom object pools & dual-structure O(1) tick collision lookups',
+      'Draw call batching via MaterialPropertyBlock & GPU instancing optimizations',
+      'HTML5/WebGL game porting, Phaser 3 game builds & touch responsiveness tuning'
+    ],
+    proofLinks: [
+      {
+        label: 'Geometry Survival',
+        sublabel: 'EnemyHealth.cs (Object Pooling)',
+        href: '/projects/geometry-survival'
+      },
+      {
+        label: 'Snake',
+        sublabel: 'SnakeController.cs (O(1) Structures)',
+        href: '/projects/snake'
+      },
+      {
+        label: 'Aicade Portfolio',
+        sublabel: '21 Shipped Commercial Web Games',
+        href: '/#quests'
+      }
+    ],
+    estimate: '$100 – $400 · 2–4 days delivery',
+    inquirySubject: 'Commission Inquiry: Performance Profiling & HTML5 Ports'
+  }
+];
+---
+
+<section class="section section-commissions" id="commissions" aria-label="Guild Commission Board">
+  <div class="container">
+    <div class="section-header commissions-header">
+      <div class="commissions-status-badge">
+        <span class="commissions-pulse" aria-hidden="true"></span>
+        <span>Guild Notice Board: Active Contracts</span>
+      </div>
+      <h2 class="section-title">Guild Commission Board</h2>
+      <p class="section-desc">
+        Specialized engineering modules & scoped contracts. Available 10–20 hrs/week for indie studios, game teams, and technical founders.
+      </p>
+
+      <div class="commissions-meta-strip hide-on-print">
+        <div><strong>Availability:</strong> 10–20 hrs/week</div>
+        <div><strong>Milestones:</strong> $50 – $500</div>
+        <div><strong>Retainers:</strong> $15 – $30/hr</div>
+        <div><strong>Delivery:</strong> Clean Git PRs & Tested C#</div>
+      </div>
+    </div>
+
+    <!-- Filter Controls -->
+    <div class="filter-bar hide-on-print" aria-label="Commission filtering">
+      <div class="filter-tabs" role="group" aria-label="Filter commissions">
+        <button type="button" aria-pressed="true" data-comm-filter="all" class="filter-chip">
+          <Icon name="folder" size={16} /> All Commissions
+        </button>
+        <button type="button" aria-pressed="false" data-comm-filter="gameplay" class="filter-chip">
+          <Icon name="controller" size={16} /> Gameplay Modules
+        </button>
+        <button type="button" aria-pressed="false" data-comm-filter="systems" class="filter-chip">
+          <Icon name="gear" size={16} /> Systems & Netcode
+        </button>
+      </div>
+      <div class="sort-controls hide-on-mobile">
+        <span class="text-muted" style="font-family: var(--font-mono); font-size: var(--fs-chip);">Shortcut: <kbd>C</kbd></span>
+      </div>
+    </div>
+
+    <!-- 4 Commission Cards Grid -->
+    <div class="commissions-grid" id="commission-cards-grid">
+      {COMMISSIONS.map(card => {
+        const mailtoHref = `mailto:${SITE.email}?subject=${encodeURIComponent(card.inquirySubject)}&body=${encodeURIComponent(`Hi Beerkanwar,\n\nI saw your ${card.title} module on your Guild Commission Board.\n\nProject details / scope:\n- Game Engine / Version:\n- Description of need:\n- Desired timeline / budget:\n\nLooking forward to hearing from you!`)}`;
+        
+        return (
+          <article 
+            class="commission-card card" 
+            data-track={card.track} 
+            data-commission-id={card.id}
+            id={card.id}
+          >
+            <div class="commission-card-top">
+              <span class="commission-code">{card.code}</span>
+              <span class="commission-track-tag">
+                {card.track === 'gameplay' ? 'Gameplay Track' : 'Systems Track'}
+              </span>
+            </div>
+
+            <h3 class="commission-card-title">{card.title}</h3>
+            <div class="commission-card-tagline">{card.tagline}</div>
+            
+            <p class="commission-card-hook">{card.hook}</p>
+
+            <div class="commission-deliverables-title">Scope & Core Deliverables:</div>
+            <ul class="commission-deliverables-list">
+              {card.deliverables.map(item => (
+                <li>{item}</li>
+              ))}
+            </ul>
+
+            <div class="commission-proof-section">
+              <div class="commission-proof-title">
+                <Icon name="check" size={16} />
+                <span>Verified in Production / Case Files:</span>
+              </div>
+              <div class="commission-proof-links">
+                {card.proofLinks.map(proof => (
+                  <a href={proof.href} class="commission-proof-link">
+                    <span>{proof.label}</span>
+                    <span class="commission-proof-file">{proof.sublabel} &rarr;</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <div class="commission-card-footer">
+              <div class="commission-estimate">
+                <span>{card.estimate}</span>
+              </div>
+              <div class="commission-card-actions">
+                <a 
+                  href={mailtoHref} 
+                  class="btn btn-primary"
+                  onclick="window.SoundManager?.play('coin')"
+                >
+                  <Icon name="mail" size={16} /> Commission Module
+                </a>
+                <a 
+                  href={card.proofLinks[0].href} 
+                  class="btn btn-secondary"
+                >
+                  Proof Case File
+                </a>
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+
+    <!-- Board Footer Callout -->
+    <div class="commissions-board-footer">
+      <div class="commissions-board-footer-content">
+        <h3>⚡ Need a Scoped Custom Contract?</h3>
+        <p>
+          Whether you need a custom raycast movement controller, a multiplayer turn loop, or critical GC/framerate bug fixes, I deliver clean, documented, and tested C# code with direct Git commits.
+        </p>
+      </div>
+      <div class="commissions-board-footer-actions">
+        <a 
+          href={`mailto:${SITE.email}?subject=Custom%20Contract%20Inquiry%20-%20Beer%20Studios`} 
+          class="btn btn-primary"
+          onclick="window.SoundManager?.play('coin')"
+        >
+          <Icon name="mail" size={16} /> Direct Inquiry
+        </a>
+        <a href="/recruiter/" class="btn btn-secondary">
+          <Icon name="bolt" size={16} /> 60s Recruiter View
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (function() {
+    function initCommissionBoard() {
+      const filterChips = document.querySelectorAll('[data-comm-filter]');
+      const cards = document.querySelectorAll('.commission-card');
+      const grid = document.getElementById('commission-cards-grid');
+      if (!grid || cards.length === 0) return;
+
+      function applyFilter(filter) {
+        filterChips.forEach(chip => {
+          chip.setAttribute('aria-pressed', (chip.dataset.commFilter === filter).toString());
+        });
+
+        cards.forEach(card => {
+          const track = card.dataset.track;
+          if (filter === 'all') {
+            card.style.display = '';
+            card.classList.remove('is-dimmed');
+          } else if (track === filter) {
+            card.style.display = '';
+            card.classList.remove('is-dimmed');
+            card.classList.add('is-highlighted');
+          } else {
+            card.style.display = 'none';
+            card.classList.remove('is-highlighted');
+          }
+        });
+      }
+
+      filterChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          const f = chip.dataset.commFilter || 'all';
+          applyFilter(f);
+        });
+      });
+
+      // React to global Player Class changes
+      window.addEventListener('player-class-changed', function(e) {
+        const cls = e.detail && e.detail.playerClass ? e.detail.playerClass : 'all';
+        if (cls === 'all') {
+          cards.forEach(card => {
+            card.style.display = '';
+            card.classList.remove('is-dimmed');
+            card.classList.remove('is-highlighted');
+          });
+          filterChips.forEach(c => c.setAttribute('aria-pressed', (c.dataset.commFilter === 'all').toString()));
+        } else {
+          cards.forEach(card => {
+            card.style.display = '';
+            if (card.dataset.track === cls) {
+              card.classList.remove('is-dimmed');
+              card.classList.add('is-highlighted');
+            } else {
+              card.classList.add('is-dimmed');
+              card.classList.remove('is-highlighted');
+            }
+          });
+          // Sort matching track to top
+          const cardArray = Array.from(cards);
+          cardArray.sort((a, b) => {
+            const aMatch = a.dataset.track === cls ? 0 : 1;
+            const bMatch = b.dataset.track === cls ? 0 : 1;
+            return aMatch - bMatch;
+          });
+          cardArray.forEach(c => grid.appendChild(c));
+          filterChips.forEach(c => c.setAttribute('aria-pressed', (c.dataset.commFilter === cls).toString()));
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCommissionBoard);
+    } else {
+      initCommissionBoard();
+    }
+  })();
+</script>
