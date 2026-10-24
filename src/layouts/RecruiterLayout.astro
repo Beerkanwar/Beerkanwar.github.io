@@ -1,5 +1,6 @@
 ---
 import { SITE } from '../data/site';
+import ToastContainer from '../components/ToastContainer.astro';
 
 import '../styles/tokens.css';
 import '../styles/base.css';
@@ -9,9 +10,13 @@ import Icon from '../components/Icon.astro';
 
 interface Props {
   title?: string;
+  description?: string;
 }
 
-const { title = `Recruiter Mode | ${SITE.name}` } = Astro.props;
+const { 
+  title = `Recruiter Mode | ${SITE.name}`,
+  description = SITE.description
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -20,10 +25,16 @@ const { title = `Recruiter Mode | ${SITE.name}` } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
+    <meta name="description" content={description} />
     <meta name="robots" content="noindex" />
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     
-    <!-- Preload only system/sans fonts -->
-    <link rel="preload" href="/fonts/Inter-Variable.ttf" as="font" type="font/ttf" crossorigin />
+    <!-- Preload only system/sans fonts (WOFF2) (M10) -->
+    <link rel="preload" href="/fonts/Inter-Variable.woff2" as="font" type="font/woff2" crossorigin />
 
     <style>
       /* Recruiter specific overrides */
@@ -55,5 +66,10 @@ const { title = `Recruiter Mode | ${SITE.name}` } = Astro.props;
         <slot />
       </main>
     </div>
+
+    <ToastContainer />
+
+    <!-- Load achievements script so 'Efficient' achievement unlocks (M9) -->
+    <script src="../scripts/achievements.ts"></script>
   </body>
 </html>

@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /bonus-stage/
 
 Sitemap: https://beerstudios.org/sitemap-index.xml

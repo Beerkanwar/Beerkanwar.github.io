@@ -39,7 +39,34 @@ class StateManager {
     try {
       const saved = localStorage.getItem('beerstudios_save_v1');
       if (saved) {
-        this.state = { ...this.state, ...JSON.parse(saved) };
+        const parsed = JSON.parse(saved);
+        // Field-by-field validation to prevent corrupt state from breaking JS (M5)
+        if (parsed && typeof parsed === 'object') {
+          if (['day', 'night', 'system'].includes(parsed.theme)) {
+            this.state.theme = parsed.theme;
+          }
+          if (['full', 'reduced', 'system'].includes(parsed.motion)) {
+            this.state.motion = parsed.motion;
+          }
+          if (['all', 'gameplay', 'systems'].includes(parsed.playerClass)) {
+            this.state.playerClass = parsed.playerClass;
+          }
+          if (typeof parsed.soundEnabled === 'boolean') {
+            this.state.soundEnabled = parsed.soundEnabled;
+          }
+          if (typeof parsed.volume === 'number' && !isNaN(parsed.volume) && parsed.volume >= 0 && parsed.volume <= 1) {
+            this.state.volume = parsed.volume;
+          }
+          if (typeof parsed.arcadeMode === 'boolean') {
+            this.state.arcadeMode = parsed.arcadeMode;
+          }
+          if (typeof parsed.keyboardShortcuts === 'boolean') {
+            this.state.keyboardShortcuts = parsed.keyboardShortcuts;
+          }
+          if (typeof parsed.showCoins === 'boolean') {
+            this.state.showCoins = parsed.showCoins;
+          }
+        }
       }
     } catch (e) {
       console.warn('Could not load save data', e);
@@ -134,6 +161,9 @@ class StateManager {
       volumeSlider.addEventListener('input', (e) => {
         this.state.volume = parseFloat((e.target as HTMLInputElement).value);
         this.saveState();
+        window.dispatchEvent(new CustomEvent('sound-settings-changed', {
+          detail: { soundEnabled: this.state.soundEnabled, volume: this.state.volume }
+        }));
       });
     }
 
@@ -157,13 +187,13 @@ class StateManager {
       });
     }
 
-    // Skill Nodes Interactive Map
+    // Skill Nodes Interactive Map - scope to project cards (L12)
     document.querySelectorAll<HTMLButtonElement>('.skill-node').forEach(node => {
       node.addEventListener('click', () => {
         const projects = node.dataset.projects?.split(',').filter(Boolean) || [];
         
-        // Remove highlight from all cards
-        document.querySelectorAll('.card').forEach(card => card.classList.remove('highlighted-skill'));
+        // Remove highlight from project cards
+        document.querySelectorAll('#grid-featured .card, #grid-side .card').forEach(card => card.classList.remove('highlighted-skill'));
         
         if (node.classList.contains('active')) {
           node.classList.remove('active');
@@ -179,6 +209,16 @@ class StateManager {
           });
         }
       });
+    });
+
+    // Listen for system theme changes if using system
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
+      if (this.state.theme === 'system') this.applyState();
+    });
+
+    // Listen for system motion changes if using system
+    window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', () => {
+      if (this.state.motion === 'system') this.applyState();
     });
   }
 
@@ -239,11 +279,12 @@ class StateManager {
     syncToggle('btn-toggle-coins', this.state.showCoins);
     syncToggle('btn-toggle-arcade', this.state.arcadeMode);
 
-    // Sync Volume
+    // Sync Volume (M5)
     const volumeSlider = document.getElementById('volume-slider') as HTMLInputElement;
     if (volumeSlider) {
       volumeSlider.disabled = !this.state.soundEnabled;
-      volumeSlider.value = this.state.volume.toString();
+      const vol = typeof this.state.volume === 'number' && !isNaN(this.state.volume) ? this.state.volume : 0.5;
+      volumeSlider.value = vol.toString();
     }
     
     // Sync HUD Class Label
@@ -268,10 +309,15 @@ class StateManager {
       detail: { playerClass: this.state.playerClass } 
     }));
 
+    // Notify sound engine of sound settings changes (L4)
+    window.dispatchEvent(new CustomEvent('sound-settings-changed', {
+      detail: { soundEnabled: this.state.soundEnabled, volume: this.state.volume }
+    }));
+
     this.saveState();
   }
   
-  private filterGridByClass() {
+  public filterGridByClass() {
     if (!this.state.playerClass) return;
     
     // Sort logic using Player Class orders if specified
@@ -304,7 +350,8 @@ class StateManager {
 
   private filterGrid(filter: string) {
     let visibleCount = 0;
-    document.querySelectorAll('.card').forEach((el) => {
+    // Scope selector to project grids only (L12)
+    document.querySelectorAll('#grid-featured .card, #grid-side .card').forEach((el) => {
       const card = el as HTMLElement;
       const track = card.dataset.track;
       
@@ -354,10 +401,21 @@ export const stateManager = new StateManager();
 // Expose for other scripts if needed
 (window as any).AppState = stateManager;
 
-// On load, apply class filtering
-document.addEventListener('DOMContentLoaded', () => {
-  const activeTab = document.querySelector('.filter-chip[aria-pressed="true"]') as HTMLButtonElement;
-  if (activeTab) {
-    activeTab.click();
+// On load, apply saved class filtering (M2)
+const applyInitialFilter = () => {
+  const currentClass = stateManager.getState().playerClass;
+  if (currentClass && currentClass !== 'all') {
+    stateManager.filterGridByClass();
+  } else {
+    const activeTab = document.querySelector('.filter-chip[aria-pressed="true"]') as HTMLButtonElement;
+    if (activeTab) {
+      activeTab.click();
+    }
   }
-});
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', applyInitialFilter);
+} else {
+  applyInitialFilter();
+}

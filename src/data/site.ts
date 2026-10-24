@@ -15,7 +15,7 @@ export const SITE = {
     timeline: '2023 – 2027 (Expected)',
   },
   focusAreas: ['Gameplay Systems', 'Backend & Security', 'Applied ML'],
-  currentWork: 'Building Siege Front (Unity 2D Auto-Battler) & Offline-First Hostel Mess Management System (.NET 10 MAUI)',
+  currentWork: 'Building Siege Front (Unity 2D Auto-Battler) & Offline-First Hostel Mess Management System (Django/DRF, PostgreSQL, React & React Native/Expo)',
   openTo: 'Software Engineering & Game Development Internships, Full-Time Roles, and Technical Collaborations',
   languages: 'English, Hindi, Punjabi',
   responseTime: 'Usually responds within 48 hours',

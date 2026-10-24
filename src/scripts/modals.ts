@@ -13,12 +13,6 @@ class ModalManager {
 
   constructor() {
     this.bindEvents();
-    
-    // Bind dynamically if Astro View Transitions happen
-    document.addEventListener('astro:page-load', () => {
-      this.menu = document.getElementById('system-menu') as HTMLDialogElement;
-      this.rebindDOM();
-    });
   }
 
   private rebindDOM() {
@@ -107,7 +101,10 @@ class ModalManager {
     if (!this.menu) this.menu = document.getElementById('system-menu') as HTMLDialogElement;
     if (!this.menu) return;
     
-    this.previouslyFocused = document.activeElement as HTMLElement;
+    // Only capture previouslyFocused if modal wasn't already open (L5)
+    if (!this.menu.open) {
+      this.previouslyFocused = document.activeElement as HTMLElement;
+    }
     
     this.switchTab(tabId, true); // true = shift focus to panel on open
     
@@ -116,13 +113,6 @@ class ModalManager {
         (window as any).SoundManager.play('menuOpen');
       }
       this.menu.showModal();
-    }
-  }
-  
-  public openModal(oldId: string) {
-    // Legacy support for keyboard.ts
-    if (this.tabMapping[oldId]) {
-      this.openMenu(this.tabMapping[oldId]);
     }
   }
 

@@ -9,6 +9,9 @@ class KeyboardManager {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement || e.target instanceof HTMLSelectElement) return;
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       
+      // Suppress shortcuts if Konami code sequence is mid-match (M7)
+      if ((window as any).Konami?.isSuppressingShortcuts()) return;
+      
       let state = { keyboardShortcuts: true };
       if ((window as any).AppState) {
         state = (window as any).AppState.getState();

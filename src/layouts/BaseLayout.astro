@@ -35,11 +35,11 @@ const canonicalURL = new URL(Astro.url.pathname, SITE.url);
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalURL} />
+    {!noindex && <link rel="canonical" href={canonicalURL} />}
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <!-- Favicons -->
-    <link rel="icon" type="image/png" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
 
@@ -49,16 +49,19 @@ const canonicalURL = new URL(Astro.url.pathname, SITE.url);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:site_name" content={SITE.studio} />
-    <meta property="og:image" content={new URL('/og/default.png', canonicalURL)} />
+    <meta property="og:image" content={new URL('/og/default.png', SITE.url).href} />
+    <meta property="og:image:alt" content="Beerkanwar — Gameplay & Systems Engineer Portfolio" />
     
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL('/og/default.png', SITE.url).href} />
     <meta name="theme-color" content="#14172E" />
 
-    <!-- Preload fonts -->
-    <link rel="preload" href="/fonts/Silkscreen-Regular.ttf" as="font" type="font/ttf" crossorigin />
-    <link rel="preload" href="/fonts/Inter-Variable.ttf" as="font" type="font/ttf" crossorigin />
-    <link rel="preload" href="/fonts/JetBrainsMono-Regular.ttf" as="font" type="font/ttf" crossorigin />
-    <link rel="preload" href="/fonts/JetBrainsMono-Bold.ttf" as="font" type="font/ttf" crossorigin />
+    <!-- Preload primary fonts (WOFF2) (M10) -->
+    <link rel="preload" href="/fonts/Silkscreen-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/Inter-Variable.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- FOUC Prevention: apply saved theme/motion before first paint -->
     <script is:inline>
@@ -73,8 +76,6 @@ const canonicalURL = new URL(Astro.url.pathname, SITE.url);
         } catch(e) {}
       })();
     </script>
-
-
   </head>
   <body>
     <!-- Background Starfield -->

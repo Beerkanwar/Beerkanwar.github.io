@@ -14,13 +14,6 @@ class AchievementManager {
     this.toastContainer = document.getElementById('toast-container');
     this.rebindDOM();
     this.updateUI();
-    
-    // Re-bind DOM elements on view transition
-    document.addEventListener('astro:page-load', () => {
-      this.toastContainer = document.getElementById('toast-container');
-      this.rebindDOM();
-      this.updateUI();
-    });
   }
 
   private rebindDOM() {
@@ -30,7 +23,7 @@ class AchievementManager {
       const btn = coinEl as HTMLButtonElement;
       if (btn.dataset.bound) return;
       btn.dataset.bound = 'true';
-      btn.addEventListener('click', (e) => {
+      btn.addEventListener('click', () => {
         const coinId = parseInt(btn.dataset.coinId || '0');
         if (coinId && !this.collectedCoins.has(coinId)) {
           this.collectedCoins.add(coinId);
@@ -49,16 +42,42 @@ class AchievementManager {
       });
     });
 
-    // Email copy
+    // Email copy (M12)
     const copyBtn = document.getElementById('btn-copy-email');
     if (copyBtn && !copyBtn.dataset.bound) {
       copyBtn.dataset.bound = 'true';
+      const originalHtml = copyBtn.innerHTML;
+      let resetTimer: any = null;
+
+      const setCopiedState = () => {
+        this.unlock('hello-world');
+        copyBtn.innerHTML = '✓ Copied!';
+        copyBtn.classList.add('is-copied');
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => {
+          copyBtn.innerHTML = originalHtml;
+          copyBtn.classList.remove('is-copied');
+        }, 2000);
+      };
+
       copyBtn.addEventListener('click', () => {
         const emailInput = document.getElementById('contact-email-input') as HTMLInputElement;
-        if (emailInput) {
-          navigator.clipboard.writeText(emailInput.value).then(() => {
-            this.unlock('hello-world');
-          });
+        const textToCopy = emailInput ? emailInput.value : 'beer14246@gmail.com';
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(textToCopy)
+            .then(setCopiedState)
+            .catch(() => {
+              if (emailInput) {
+                emailInput.select();
+                document.execCommand('copy');
+                setCopiedState();
+              }
+            });
+        } else if (emailInput) {
+          emailInput.select();
+          document.execCommand('copy');
+          setCopiedState();
         }
       });
     }

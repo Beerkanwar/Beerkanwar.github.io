@@ -2,7 +2,6 @@
 import type { CollectionEntry } from 'astro:content';
 import Icon from './Icon.astro';
 
-
 interface Props {
   quest: CollectionEntry<'quests'>;
 }
@@ -26,7 +25,14 @@ const data = quest.data;
   <div class="quest-body">
     <ul class="quest-bullets">
       {data.bullets.map(bullet => (
-        <li set:html={bullet.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')} />
+        <li>
+          {bullet.split(/(\*\*.*?\*\*)/g).map(part => {
+            if (part.startsWith('**') && part.endsWith('**')) {
+              return <strong>{part.slice(2, -2)}</strong>;
+            }
+            return part;
+          })}
+        </li>
       ))}
     </ul>
     

@@ -9,21 +9,43 @@ import Coin from '../../components/Coin.astro';
 import BlueprintPoster from '../../components/BlueprintPoster.astro';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
+  const totalProjects = projects.length;
   return projects.map(project => ({
     params: { id: project.id.replace(/\.md$/, '') },
-    props: { project },
+    props: { project, totalProjects },
   }));
 }
 
-const { project } = Astro.props;
+const { project, totalProjects } = Astro.props;
 const data = project.data;
 const { Content } = await render(project);
 
-const posterPath = path.join(process.cwd(), 'public', data.media.poster);
-const hasPoster = fs.existsSync(posterPath);
+// Resolve public folder safely without relying on process.cwd() (L11)
+const publicDir = fileURLToPath(new URL('../../../public', import.meta.url));
+
+const posterPath = data.media.poster ? path.join(publicDir, data.media.poster) : null;
+const hasPoster = Boolean(posterPath && fs.existsSync(posterPath));
+
+const clipWebmPath = data.media.clipWebm ? path.join(publicDir, data.media.clipWebm) : null;
+const clipMp4Path = data.media.clipMp4 ? path.join(publicDir, data.media.clipMp4) : null;
+const hasVideo = Boolean(clipWebmPath && clipMp4Path && fs.existsSync(clipWebmPath) && fs.existsSync(clipMp4Path));
+
+// Only render architecture SVG if the file exists on disk (H3)
+const archSvgPath = data.media.architectureSvgId 
+  ? path.join(publicDir, 'media', 'projects', `${data.media.architectureSvgId}.svg`) 
+  : null;
+const hasArchSvg = Boolean(archSvgPath && fs.existsSync(archSvgPath));
+
+// Only include gallery images that actually exist on disk to prevent 404s (M4)
+const validGallery = (data.media.gallery || []).filter(item => {
+  if (!item.src) return false;
+  const absPath = path.join(publicDir, item.src);
+  return fs.existsSync(absPath);
+});
 ---
 
 <BaseLayout title={`${data.title} | Case File`}>
@@ -33,7 +55,7 @@ const hasPoster = fs.existsSync(posterPath);
         <a href="/#levels" class="btn btn-secondary">&larr; Back to Base</a>
       </div>
       
-      <article class="case-file">
+      <article class="case-file" data-total-projects={totalProjects}>
         <header class="case-header">
           <div class="case-meta-top">
             <span class="case-stage">STAGE {data.canonicalStage}</span>
@@ -84,7 +106,7 @@ const hasPoster = fs.existsSync(posterPath);
               <a href={data.links.itch} target="_blank" rel="noopener noreferrer">Play on itch.io</a>
             </div>
           ) : hasPoster ? (
-            data.media.clipWebm && data.media.clipMp4 ? (
+            hasVideo ? (
               <video class="case-video-full" autoplay loop muted playsinline poster={data.media.poster}>
                 <source src={data.media.clipWebm} type="video/webm" />
                 <source src={data.media.clipMp4} type="video/mp4" />
@@ -153,7 +175,7 @@ const hasPoster = fs.existsSync(posterPath);
           <section class="case-section">
             <h2>Implementation Details</h2>
             
-            {data.media.architectureSvgId && (
+            {hasArchSvg && (
               <div style="margin-bottom: 2rem; border: 1px solid var(--border); padding: 1rem; background: var(--bg-deep);">
                 <img src={`/media/projects/${data.media.architectureSvgId}.svg`} alt="Architecture Diagram" style="width: 100%; height: auto;" />
               </div>
@@ -171,10 +193,10 @@ const hasPoster = fs.existsSync(posterPath);
             </section>
           )}
 
-          {data.media.gallery && data.media.gallery.length > 0 && (
+          {validGallery.length > 0 && (
             <section class="case-section">
               <h2>Media Gallery</h2>
-              <Gallery images={data.media.gallery} />
+              <Gallery images={validGallery} />
             </section>
           )}
           
@@ -216,7 +238,9 @@ const hasPoster = fs.existsSync(posterPath);
       let isNew = false;
       if (!viewed.includes(id)) {
         viewed.push(id);
-        localStorage.setItem('beerstudios_viewed_projects', JSON.stringify(viewed));
+        try {
+          localStorage.setItem('beerstudios_viewed_projects', JSON.stringify(viewed));
+        } catch(e) {}
         isNew = true;
       }
       
@@ -225,8 +249,10 @@ const hasPoster = fs.existsSync(posterPath);
         window.dispatchEvent(new CustomEvent('achievement-unlocked', { detail: { id: 'level-up' } }));
       }
       
-      // Fire completionist if all 12 are viewed
-      if (viewed.length >= 12 && isNew) {
+      // Fire completionist if all projects are viewed (M8)
+      const caseFileEl = document.querySelector('.case-file');
+      const totalProjects = parseInt(caseFileEl ? caseFileEl.getAttribute('data-total-projects') : '13', 10);
+      if (viewed.length >= totalProjects && isNew) {
         window.dispatchEvent(new CustomEvent('achievement-unlocked', { detail: { id: 'completionist' } }));
       }
     }, 500);

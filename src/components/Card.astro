@@ -7,6 +7,7 @@ import Coin from './Coin.astro';
 import BlueprintPoster from './BlueprintPoster.astro';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -16,8 +17,15 @@ const { project } = Astro.props;
 const data = project.data;
 const slug = project.id.replace(/\.md$/, '');
 
-const posterPath = path.join(process.cwd(), 'public', data.media.poster);
-const hasPoster = fs.existsSync(posterPath);
+// Resolve public folder safely without relying on process.cwd() (L11)
+const publicDir = fileURLToPath(new URL('../../public', import.meta.url));
+const posterPath = data.media.poster ? path.join(publicDir, data.media.poster) : null;
+const hasPoster = Boolean(posterPath && fs.existsSync(posterPath));
+
+// Verify video files exist before rendering <video> to prevent 404s (M4)
+const clipWebmPath = data.media.clipWebm ? path.join(publicDir, data.media.clipWebm) : null;
+const clipMp4Path = data.media.clipMp4 ? path.join(publicDir, data.media.clipMp4) : null;
+const hasVideo = Boolean(clipWebmPath && clipMp4Path && fs.existsSync(clipWebmPath) && fs.existsSync(clipMp4Path));
 ---
 
 <article 
@@ -46,7 +54,7 @@ const hasPoster = fs.existsSync(posterPath);
   <div class="card-media">
     <a href={`/projects/${slug}`} tabindex="-1">
       {hasPoster ? (
-        data.media.clipWebm && data.media.clipMp4 ? (
+        hasVideo ? (
           <video 
             class="card-video" 
             autoplay 

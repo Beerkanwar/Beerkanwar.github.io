@@ -9,17 +9,27 @@ import Icon from '../components/Icon.astro';
       <h1 class="glitch" data-text="404">404</h1>
       <h2 style="margin-bottom: 2rem;">GAME OVER</h2>
       
-      <p class="text-muted" style="margin-bottom: 3rem;">
+      <p class="text-muted" style="margin-bottom: 2rem;">
         The coordinates you requested do not exist in this sector.
       </p>
       
-      <!-- Mini game container will be injected via JS -->
+      <!-- Mini game container -->
       <div id="snake-404-container" class="snake-404-container hide-on-print">
         <canvas id="snake-404-canvas" width="400" height="400"></canvas>
         <div id="snake-404-overlay" class="snake-404-overlay">
           <button type="button" id="btn-start-snake" class="btn btn-primary">
             <Icon name="play" size={16} /> Play Snake
           </button>
+        </div>
+      </div>
+
+      <!-- Mobile On-Screen D-Pad Controls (M6) -->
+      <div class="snake-dpad hide-on-print" aria-label="Snake Direction Controls">
+        <button type="button" class="btn btn-secondary snake-dpad-btn" data-dir="up" aria-label="Move Up">▲</button>
+        <div class="snake-dpad-row">
+          <button type="button" class="btn btn-secondary snake-dpad-btn" data-dir="left" aria-label="Move Left">◀</button>
+          <button type="button" class="btn btn-secondary snake-dpad-btn" data-dir="down" aria-label="Move Down">▼</button>
+          <button type="button" class="btn btn-secondary snake-dpad-btn" data-dir="right" aria-label="Move Right">▶</button>
         </div>
       </div>
 
@@ -31,9 +41,46 @@ import Icon from '../components/Icon.astro';
     </div>
   </section>
 
+  <style>
+    .snake-404-container canvas {
+      max-width: 100%;
+      height: auto;
+      aspect-ratio: 1 / 1;
+      touch-action: none;
+      display: block;
+    }
+    .snake-dpad {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-top: 1rem;
+    }
+    .snake-dpad-row {
+      display: flex;
+      gap: 8px;
+    }
+    .snake-dpad-btn {
+      width: 48px;
+      height: 48px;
+      min-width: 48px;
+      min-height: 48px;
+      font-size: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      touch-action: manipulation;
+    }
+    @media (min-width: 768px) {
+      .snake-dpad {
+        display: none;
+      }
+    }
+  </style>
+
   <!-- Snake Mini-Game Script -->
   <script is:inline>
-    // Extremely basic snake implementation for 404 page
     (function() {
       const canvas = document.getElementById('snake-404-canvas');
       const overlay = document.getElementById('snake-404-overlay');
@@ -101,7 +148,6 @@ import Icon from '../components/Icon.astro';
           score++;
           placeApple();
           if (score === 10) {
-            // Unlock achievement in real app, dispatch custom event
             window.dispatchEvent(new CustomEvent('achievement-unlocked', { detail: { id: 'snake-charmer' }}));
           }
         } else {
@@ -109,13 +155,13 @@ import Icon from '../components/Icon.astro';
         }
         
         // Draw
-        ctx.fillStyle = '#14172E'; // bg
+        ctx.fillStyle = '#14172E';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
-        ctx.fillStyle = '#F03A47'; // apple (red)
+        ctx.fillStyle = '#F03A47';
         ctx.fillRect(apple.x * gridSize, apple.y * gridSize, gridSize - 1, gridSize - 1);
         
-        ctx.fillStyle = '#39E58A'; // snake (green)
+        ctx.fillStyle = '#39E58A';
         snake.forEach((seg) => {
           ctx.fillRect(seg.x * gridSize, seg.y * gridSize, gridSize - 1, gridSize - 1);
         });
@@ -140,10 +186,10 @@ import Icon from '../components/Icon.astro';
         gameInterval = setInterval(gameLoop, 100);
       });
       
+      // Keyboard Controls
       document.addEventListener('keydown', (e) => {
         if (!gameInterval) return;
         
-        // Prevent default scrolling for arrows
         if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
           e.preventDefault();
         }
@@ -152,6 +198,51 @@ import Icon from '../components/Icon.astro';
         else if (e.key === 'ArrowDown' && dy !== -1) { dx = 0; dy = 1; }
         else if (e.key === 'ArrowLeft' && dx !== 1) { dx = -1; dy = 0; }
         else if (e.key === 'ArrowRight' && dx !== -1) { dx = 1; dy = 0; }
+      });
+
+      // Touch Swipe Controls (M6)
+      let touchStartX = 0;
+      let touchStartY = 0;
+
+      canvas.addEventListener('touchstart', (e) => {
+        if (e.touches.length > 0) {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+        }
+      }, { passive: true });
+
+      canvas.addEventListener('touchend', (e) => {
+        if (!gameInterval || e.changedTouches.length === 0) return;
+        const deltaX = e.changedTouches[0].clientX - touchStartX;
+        const deltaY = e.changedTouches[0].clientY - touchStartY;
+        const minSwipe = 20;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          if (Math.abs(deltaX) > minSwipe) {
+            if (deltaX > 0 && dx !== -1) { dx = 1; dy = 0; }
+            else if (deltaX < 0 && dx !== 1) { dx = -1; dy = 0; }
+          }
+        } else {
+          if (Math.abs(deltaY) > minSwipe) {
+            if (deltaY > 0 && dy !== -1) { dx = 0; dy = 1; }
+            else if (deltaY < 0 && dy !== 1) { dx = 0; dy = -1; }
+          }
+        }
+      }, { passive: true });
+
+      // On-Screen D-Pad Controls (M6)
+      document.querySelectorAll('.snake-dpad-btn').forEach(dpadBtn => {
+        const handleDir = (e) => {
+          e.preventDefault();
+          if (!gameInterval) return;
+          const dir = dpadBtn.getAttribute('data-dir');
+          if (dir === 'up' && dy !== 1) { dx = 0; dy = -1; }
+          else if (dir === 'down' && dy !== -1) { dx = 0; dy = 1; }
+          else if (dir === 'left' && dx !== 1) { dx = -1; dy = 0; }
+          else if (dir === 'right' && dx !== -1) { dx = 1; dy = 0; }
+        };
+        dpadBtn.addEventListener('touchstart', handleDir, { passive: false });
+        dpadBtn.addEventListener('mousedown', handleDir);
       });
       
       // Initial draw

@@ -14,37 +14,58 @@ for (let i = 0; i < title.length; i++) {
   hash = title.charCodeAt(i) + ((hash << 5) - hash);
 }
 const hue = Math.abs(hash) % 360;
-
 const primaryColor = `hsl(${hue}, 70%, 50%)`;
-const bgPattern = track === 'gameplay' ? 'url(#grid)' : track === 'systems' ? 'url(#dots)' : 'url(#stripes)';
+
+// Unique prefix for SVG IDs to prevent duplicate IDs on the page (L2)
+const uid = `bp-${Math.abs(hash).toString(36)}-${stage.replace(/[^a-zA-Z0-9]/g, '')}`;
+const gridId = `grid-${uid}`;
+const dotsId = `dots-${uid}`;
+const stripesId = `stripes-${uid}`;
+const glitchId = `glitch-${uid}`;
+
+const bgPattern = track === 'gameplay' ? `url(#${gridId})` : track === 'systems' ? `url(#${dotsId})` : `url(#${stripesId})`;
+
+const cleanTitle = title.toUpperCase();
+
+// Font-size calculation to prevent clipping on long titles (H2)
+// Available text width in 1280 viewBox is ~1100px
+let fontSize = 72;
+if (cleanTitle.length > 26) {
+  fontSize = 42;
+} else if (cleanTitle.length > 21) {
+  fontSize = 50;
+} else if (cleanTitle.length > 16) {
+  fontSize = 60;
+}
+
+const estimatedCharWidth = fontSize * 0.65;
+const needsCompression = cleanTitle.length * estimatedCharWidth > 1100;
 ---
 
 <svg viewBox="0 0 1280 720" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" class="blueprint-poster">
   <defs>
-    <!-- Background Patterns -->
-    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <!-- Background Patterns with unique IDs -->
+    <pattern id={gridId} width="40" height="40" patternUnits="userSpaceOnUse">
       <rect width="40" height="40" fill="#0D0F1E" />
       <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#252A4A" stroke-width="1" />
     </pattern>
-    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
+    <pattern id={dotsId} width="20" height="20" patternUnits="userSpaceOnUse">
       <rect width="20" height="20" fill="#0D0F1E" />
       <circle cx="2" cy="2" r="1" fill="#31375C" />
     </pattern>
-    <pattern id="stripes" width="20" height="20" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+    <pattern id={stripesId} width="20" height="20" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
       <rect width="20" height="20" fill="#0D0F1E" />
       <line x1="0" y1="0" x2="0" y2="20" stroke="#1A1E38" stroke-width="4" />
     </pattern>
     
-    <!-- Glitch Filter -->
-    <filter id="glitch">
-      <feOffset dx="4" dy="0" in="SourceGraphic" result="red-shift">
-        <feColorMatrix type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" />
-      </feOffset>
-      <feOffset dx="-4" dy="0" in="SourceGraphic" result="cyan-shift">
-        <feColorMatrix type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
-      </feOffset>
-      <feBlend mode="screen" in="red-shift" in2="cyan-shift" />
-      <feBlend mode="screen" in="SourceGraphic" />
+    <!-- Valid Glitch Filter without invalid nesting (L2) -->
+    <filter id={glitchId}>
+      <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="red" />
+      <feOffset in="red" dx="4" dy="0" result="red-shift" />
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" result="cyan" />
+      <feOffset in="cyan" dx="-4" dy="0" result="cyan-shift" />
+      <feBlend mode="screen" in="red-shift" in2="cyan-shift" result="glitch-chroma" />
+      <feBlend mode="screen" in="SourceGraphic" in2="glitch-chroma" />
     </filter>
   </defs>
 
@@ -62,8 +83,17 @@ const bgPattern = track === 'gameplay' ? 'url(#grid)' : track === 'systems' ? 'u
     STAGE {stage} // {track.toUpperCase()}
   </text>
   
-  <text x="76" y="220" font-family="'Silkscreen', monospace" font-size="80" fill="#FFFFFF" font-weight="bold" filter="url(#glitch)">
-    {title.toUpperCase()}
+  <text 
+    x="76" 
+    y="220" 
+    font-family="'Silkscreen', monospace" 
+    font-size={fontSize} 
+    fill="#FFFFFF" 
+    font-weight="bold" 
+    filter={`url(#${glitchId})`}
+    {...(needsCompression ? { textLength: "1100", lengthAdjust: "spacingAndGlyphs" } : {})}
+  >
+    {cleanTitle}
   </text>
   
   <!-- Tech Stack Grid -->
@@ -83,7 +113,7 @@ const bgPattern = track === 'gameplay' ? 'url(#grid)' : track === 'systems' ? 'u
   <g transform="translate(880, 280)" stroke={primaryColor} stroke-width="2" fill="none">
     <circle cx="100" cy="100" r="80" stroke-dasharray="10 10" />
     <circle cx="100" cy="100" r="60" opacity="0.5" />
-    <circle cx="100" cy="100" r="20" fill={primaryColor} />
+    <circle cx="100" cy="20" fill={primaryColor} />
     <path d="M100 20 L100 180 M20 100 L180 100" opacity="0.3" />
     <path d="M43.4 43.4 L156.6 156.6 M43.4 156.6 L156.6 43.4" opacity="0.3" />
   </g>

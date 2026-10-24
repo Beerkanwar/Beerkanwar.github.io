@@ -13,14 +13,28 @@ class SoundEngine {
     document.addEventListener('click', init);
     document.addEventListener('keydown', init);
 
-    // Sync with AppState initially and poll for changes (or rely on events)
-    setInterval(() => {
+    // Sync with AppState initially and subscribe to events instead of polling (L4)
+    const syncState = () => {
       if ((window as any).AppState) {
         const state = (window as any).AppState.getState();
         this.enabled = state.soundEnabled;
         this.volume = state.volume;
       }
-    }, 500);
+    };
+    syncState();
+    
+    window.addEventListener('sound-settings-changed', (e: any) => {
+      if (e.detail) {
+        this.enabled = Boolean(e.detail.soundEnabled);
+        this.volume = typeof e.detail.volume === 'number' ? e.detail.volume : 0.5;
+      } else {
+        syncState();
+      }
+    });
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', syncState);
+    }
     
     this.bindHoverEvents();
   }
@@ -38,27 +52,17 @@ class SoundEngine {
 
   private bindHoverEvents() {
     document.addEventListener('mouseover', (e) => {
-      const target = e.target as HTMLElement;
-      if (
-        target.tagName === 'BUTTON' || 
-        target.tagName === 'A' || 
-        target.closest('button') || 
-        target.closest('a')
-      ) {
-        this.play('hover');
-      }
+      const interactive = (e.target as HTMLElement).closest('button, a, .hud-btn, .filter-chip');
+      if (!interactive) return;
+      // Prevent child-to-parent repeat triggers
+      if (e.relatedTarget && interactive.contains(e.relatedTarget as Node)) return;
+      this.play('hover');
     });
 
     document.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement;
-      if (
-        target.tagName === 'BUTTON' || 
-        target.tagName === 'A' || 
-        target.closest('button') || 
-        target.closest('a')
-      ) {
-        this.play('click');
-      }
+      const interactive = (e.target as HTMLElement).closest('button, a, .hud-btn, .filter-chip');
+      if (!interactive) return;
+      this.play('click');
     });
   }
 

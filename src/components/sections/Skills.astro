@@ -10,10 +10,8 @@ import Icon from '../Icon.astro';
       <p class="section-desc">Interactive capability map. Click nodes to highlight where they were used.</p>
     </div>
 
-    <!-- The actual tree container and drawing logic will be initialized by JS -->
+    <!-- Interactive skill tree container -->
     <div class="skill-tree-container hide-on-print" aria-label="Interactive skill tree">
-      <canvas id="skill-tree-canvas" class="skill-tree-canvas"></canvas>
-      
       <div class="skill-nodes" id="skill-nodes-container">
         {SKILLS.map(skill => {
           const branchDef = SKILL_BRANCHES.find(b => b.id === skill.branch);
