@@ -1,4 +1,5 @@
 import { ACHIEVEMENTS } from '../data/achievements';
+import { SITE } from '../data/site';
 
 class AchievementManager {
   private unlockedIds: Set<string> = new Set();
@@ -60,9 +61,17 @@ class AchievementManager {
         }, 2000);
       };
 
+      const setErrorState = () => {
+        copyBtn.innerHTML = '✗ Copy failed';
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => {
+          copyBtn.innerHTML = originalHtml;
+        }, 2000);
+      };
+
       copyBtn.addEventListener('click', () => {
         const emailInput = document.getElementById('contact-email-input') as HTMLInputElement;
-        const textToCopy = emailInput ? emailInput.value : 'beer14246@gmail.com';
+        const textToCopy = emailInput ? emailInput.value : SITE.email;
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(textToCopy)
@@ -70,14 +79,28 @@ class AchievementManager {
             .catch(() => {
               if (emailInput) {
                 emailInput.select();
-                document.execCommand('copy');
-                setCopiedState();
+                try {
+                  const success = document.execCommand('copy');
+                  if (success) setCopiedState();
+                  else setErrorState();
+                } catch {
+                  setErrorState();
+                }
+              } else {
+                setErrorState();
               }
             });
         } else if (emailInput) {
           emailInput.select();
-          document.execCommand('copy');
-          setCopiedState();
+          try {
+            const success = document.execCommand('copy');
+            if (success) setCopiedState();
+            else setErrorState();
+          } catch {
+            setErrorState();
+          }
+        } else {
+          setErrorState();
         }
       });
     }

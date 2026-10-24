@@ -27,19 +27,22 @@ const bgPattern = track === 'gameplay' ? `url(#${gridId})` : track === 'systems'
 
 const cleanTitle = title.toUpperCase();
 
-// Font-size calculation to prevent clipping on long titles (H2)
-// Available text width in 1280 viewBox is ~1100px
+// Font-size calculation to prevent clipping on long titles (H2, N2)
+// Available text width in 1280 viewBox is ~1100px (x=76 to x=1180)
 let fontSize = 72;
-if (cleanTitle.length > 26) {
+if (cleanTitle.length > 32) {
+  fontSize = 36;
+} else if (cleanTitle.length > 25) {
   fontSize = 42;
-} else if (cleanTitle.length > 21) {
+} else if (cleanTitle.length > 20) {
   fontSize = 50;
-} else if (cleanTitle.length > 16) {
+} else if (cleanTitle.length > 15) {
   fontSize = 60;
 }
 
-const estimatedCharWidth = fontSize * 0.65;
-const needsCompression = cleanTitle.length * estimatedCharWidth > 1100;
+// Silkscreen character width is ~0.9 * font-size
+const estimatedCharWidth = fontSize * 0.9;
+const needsCompression = cleanTitle.length * estimatedCharWidth > 1080;
 ---
 
 <svg viewBox="0 0 1280 720" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" class="blueprint-poster">
@@ -91,7 +94,7 @@ const needsCompression = cleanTitle.length * estimatedCharWidth > 1100;
     fill="#FFFFFF" 
     font-weight="bold" 
     filter={`url(#${glitchId})`}
-    {...(needsCompression ? { textLength: "1100", lengthAdjust: "spacingAndGlyphs" } : {})}
+    {...(needsCompression ? { textLength: "1080", lengthAdjust: "spacingAndGlyphs" } : {})}
   >
     {cleanTitle}
   </text>
@@ -109,11 +112,11 @@ const needsCompression = cleanTitle.length * estimatedCharWidth > 1100;
     ))}
   </g>
   
-  <!-- Decorative Abstract Diagram -->
+  <!-- Decorative Abstract Diagram (N1: cy=100 r=20) -->
   <g transform="translate(880, 280)" stroke={primaryColor} stroke-width="2" fill="none">
     <circle cx="100" cy="100" r="80" stroke-dasharray="10 10" />
     <circle cx="100" cy="100" r="60" opacity="0.5" />
-    <circle cx="100" cy="20" fill={primaryColor} />
+    <circle cx="100" cy="100" r="20" fill={primaryColor} />
     <path d="M100 20 L100 180 M20 100 L180 100" opacity="0.3" />
     <path d="M43.4 43.4 L156.6 156.6 M43.4 156.6 L156.6 43.4" opacity="0.3" />
   </g>

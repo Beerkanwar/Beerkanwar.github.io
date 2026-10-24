@@ -29,7 +29,10 @@
 .hud-logo {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  min-height: 44px;
+  min-width: 44px;
   text-decoration: none;
   color: var(--text);
   flex-shrink: 0;
@@ -133,6 +136,7 @@
   gap: 6px;
   padding: 8px 12px;
   min-height: 44px;
+  min-width: 44px;
   font-family: var(--font-display);
   font-size: 12px;
   color: var(--accent-yellow);
@@ -735,7 +739,7 @@
 .quest-links a {
   display: inline-flex;
   align-items: center;
-  min-height: 40px;
+  min-height: 44px;
   padding: 8px 12px;
   font-family: var(--font-display);
   font-size: 12px;

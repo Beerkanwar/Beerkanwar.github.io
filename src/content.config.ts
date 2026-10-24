@@ -1,4 +1,5 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 const projectsCollection = defineCollection({
@@ -49,11 +50,11 @@ const projectsCollection = defineCollection({
     platform: z.string(),
     teamSize: z.string(),
     links: z.object({
-      repo: z.string().url().optional(),
-      playStore: z.string().url().optional(),
-      itch: z.string().url().optional(),
-      itchEmbedUrl: z.string().url().optional(),
-      video: z.string().url().optional(),
+      repo: z.url().optional(),
+      playStore: z.url().optional(),
+      itch: z.url().optional(),
+      itchEmbedUrl: z.url().optional(),
+      video: z.url().optional(),
     }),
     controlsText: z.string().optional(),
     relatedProject: z
@@ -93,7 +94,7 @@ const questsCollection = defineCollection({
       .array(
         z.object({
           label: z.string(),
-          url: z.string(),
+          url: z.url(),
         })
       )
       .optional(),
@@ -127,7 +128,7 @@ const wipCollection = defineCollection({
       .array(
         z.object({
           label: z.string(),
-          url: z.string(),
+          url: z.url(),
         })
       )
       .optional(),
