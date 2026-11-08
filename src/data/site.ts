@@ -1,7 +1,7 @@
 export const SITE = {
   name: 'Beerkanwar Singh',
   studio: 'Beer Studios',
-  url: 'https://beerstudios.org',
+  url: 'https://beerkanwar.github.io',
   title: 'Beerkanwar — Gameplay & Systems Engineer',
   description:
     'Portfolio of Beerkanwar: Unity games, backend systems, and applied ML projects. Snake is live on Google Play.',

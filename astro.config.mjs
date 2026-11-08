@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://beerstudios.org',
+  site: 'https://beerkanwar.github.io',
   output: 'static',
   trailingSlash: 'always',
   integrations: [

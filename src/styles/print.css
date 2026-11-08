@@ -1,6 +1,6 @@
 /* ==========================================================
    PRINT.CSS — Print Styles (Recruiter Mode A4 Target)
-   beerstudios.org
+   beerkanwar.github.io
    ========================================================== */
 
 @media print {
@@ -57,19 +57,6 @@
   }
 
   .recruiter-section {
-    page-break-inside: avoid;
-  }
-
-  .contract-banner {
-    border: 1pt solid #555 !important;
-    border-left: 3pt solid #111 !important;
-    background: #fafafa !important;
-    padding: 8pt 12pt !important;
-    margin-bottom: 12pt !important;
-    page-break-inside: avoid;
-  }
-
-  .section-commissions {
     page-break-inside: avoid;
   }
 
